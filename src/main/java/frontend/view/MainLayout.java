@@ -8,7 +8,7 @@ import javafx.scene.layout.StackPane; // StackPane adalah sebuah kelas dalam Jav
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
 
 public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen UI dalam aplikasi. BorderPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya dengan cara yang terstruktur, seperti menempatkan elemen di bagian atas, bawah, kiri, kanan, dan tengah aplikasi. Dengan menggunakan BorderPane, Anda dapat dengan mudah mengatur tampilan aplikasi Anda sesuai dengan kebutuhan desain yang diinginkan.
-    public Mainlayout() {
+    public MainLayout() {
 
         // === Header ===
         Label title = new Label("DOMPETKU"); // Membuat sebuah objek Label yang akan digunakan sebagai judul dalam aplikasi. Label adalah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Dengan membuat objek
@@ -26,13 +26,17 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
                 transaksiButton
         );
 
-        sidebar.setSpacing(10); // Jarak antar tombol dalam sidebar
-        sidebar.setPrefWidth(150); // Lebar sidebar
+        dashboardButton.setPrefWidth(120); // Mengatur lebar tombol dashboardButton dan transaksiButton menjadi 120 piksel menggunakan metode setPrefWidth(120) dari objek tombol, sehingga tombol-tombol tersebut memiliki ukuran yang konsisten dan mudah untuk diklik oleh pengguna.
+        transaksiButton.setPrefWidth(120); // Mengatur lebar tombol dashboardButton dan transaksiButton menjadi 120 piksel menggunakan metode setPrefWidth(120) dari objek tombol, sehingga tombol-tombol tersebut memiliki ukuran yang konsisten dan mudah untuk diklik oleh pengguna.
+
+        sidebar.setSpacing(20); // Mengatur jarak vertikal antara tombol-tombol di dalam sidebar sebesar 20 piksel menggunakan metode setSpacing(20) dari objek sidebar, sehingga tombol-tombol tersebut tidak terlalu berdekatan dan tampilan menjadi lebih rapi.
+        sidebar.setStyle("-fx-padding: 20;"); // Mengatur padding (jarak antara tepi sidebar dengan elemen di dalamnya) sebesar 20 piksel menggunakan metode setStyle() dengan parameter "-fx-padding: 20;". Ini akan memberikan ruang yang cukup antara tepi sidebar dan tombol-tombol navigasi di dalamnya, sehingga tampilan menjadi lebih rapi dan nyaman untuk dilihat.
+        header.setPrefHeight(60); // Mengatur tinggi header menjadi 60 piksel menggunakan metode setPrefHeight() dari objek header, sehingga akan memberikan ruang
 
         // === CONTENT AREA ===
         StackPane contentArea = new StackPane(); // StackPane adalah sebuah kelas dalam JavaFX yang digunakan untuk menumpuk elemen-elemen UI di atas satu sama lain. StackPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan, sehingga elemen yang terakhir ditambahkan akan berada di atas elemen sebelumnya.
         DashboardView dashboardView = new DashboardView(); // Membuat sebuah objek DashboardView yang akan digunakan sebagai tampilan utama dalam area konten. DashboardView adalah kelas yang berisi tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
-        cotentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea menggunakan metode getChildren().add(), sehingga dashboardView akan ditampilkan sebagai tampilan utama di area konten saat aplikasi dijalankan.
+        contentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea menggunakan metode getChildren().add(), sehingga dashboardView akan ditampilkan sebagai tampilan utama di area konten saat aplikasi dijalankan.
 
         // === PASANG KE BORDERPANE ===
         setTop(header); // Menempatkan header di bagian atas BorderPane, sehingga akan menampilkan judul "DOMPETKU" di bagian atas aplikasi.
