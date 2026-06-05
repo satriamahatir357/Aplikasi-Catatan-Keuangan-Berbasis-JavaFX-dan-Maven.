@@ -7,6 +7,9 @@ import javafx.scene.layout.BorderPane; // BorderPane adalah sebuah kelas dalam J
 import javafx.scene.layout.StackPane; // StackPane adalah sebuah kelas dalam JavaFX yang digunakan untuk menumpuk elemen-elemen UI di atas satu sama lain. StackPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan, sehingga elemen yang terakhir ditambahkan akan berada di atas elemen sebelumnya.
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
 
+import frontend.view.DashboardView; // Mengimpor kelas DashboardView dari package frontend.view, yang merupakan tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
+import frontend.view.TransaksiView; // Mengimpor kelas TransaksiView dari package frontend.view, yang merupakan tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
+
 public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen UI dalam aplikasi. BorderPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya dengan cara yang terstruktur, seperti menempatkan elemen di bagian atas, bawah, kiri, kanan, dan tengah aplikasi. Dengan menggunakan BorderPane, Anda dapat dengan mudah mengatur tampilan aplikasi Anda sesuai dengan kebutuhan desain yang diinginkan.
     public MainLayout() {
 
@@ -36,7 +39,17 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
         // === CONTENT AREA ===
         StackPane contentArea = new StackPane(); // StackPane adalah sebuah kelas dalam JavaFX yang digunakan untuk menumpuk elemen-elemen UI di atas satu sama lain. StackPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan, sehingga elemen yang terakhir ditambahkan akan berada di atas elemen sebelumnya.
         DashboardView dashboardView = new DashboardView(); // Membuat sebuah objek DashboardView yang akan digunakan sebagai tampilan utama dalam area konten. DashboardView adalah kelas yang berisi tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
-        contentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea menggunakan metode getChildren().add(), sehingga dashboardView akan ditampilkan sebagai tampilan utama di area konten saat aplikasi dijalankan.
+        TransaksiView transaksiView = new TransaksiView(); // Membuat sebuah objek TransaksiView yang akan digunakan sebagai tampilan untuk menambahkan transaksi baru. TransaksiView adalah kelas yang berisi tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
+        
+        dashboardButton.setOnAction(e ->{
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(dashboardView);
+        });
+
+        transaksiButton.setOnAction(e ->{
+            contentArea.getChildren().clear(); // Menghapus semua elemen yang ada di dalam contentArea menggunakan metode getChildren().clear(), sehingga ketika tombol transaksiButton diklik, tampilan sebelumnya (seperti DashboardView) akan dihapus dari area konten sebelum menampilkan TransaksiView.
+            contentArea.getChildren().add(transaksiView); // Menambahkan transaksiView ke dalam contentArea, sehingga ketika tombol transaksiButton diklik, tampilan TransaksiView akan ditampilkan di area konten.
+        });
 
         // === PASANG KE BORDERPANE ===
         setTop(header); // Menempatkan header di bagian atas BorderPane, sehingga akan menampilkan judul "DOMPETKU" di bagian atas aplikasi.
