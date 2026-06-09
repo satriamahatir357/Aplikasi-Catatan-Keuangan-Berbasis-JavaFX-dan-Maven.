@@ -81,6 +81,23 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tambahButton,
             transaksiTable
         );
+
+        // event handler untuk tombol tambah
+        tambahButton.setOnAction(e -> {
+            // Ambil data dari inputan
+            String keterangan = keteranganField.getText(); // Mengambil teks dari keteranganField dan menyimpannya dalam variabel keterangan
+            double nominal = Double.parseDouble(nominalField.getText());
+            String tipe = tipeBox.getValue(); // Mengambil nilai yang dipilih dari tipeBox dan menyimpannya dalam variabel tipe
+            String tanggal = tanggalPicker.
+                            getValue().
+                            toString(); // Mengambil nilai yang dipilih dari tanggalPicker, mengubahnya menjadi string, dan menyimpannya dalam variabel tanggal
+
+            Transaksi transaksi = new Transaksi(keterangan, nominal, tipe, tanggal);
+
+            transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
+        });
+
+
     }
     
 }
