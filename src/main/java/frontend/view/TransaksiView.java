@@ -8,9 +8,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
+import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
 
 public class TransaksiView extends VBox { // extends VBox untuk membuat layout vertikal
+    private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
+
     public TransaksiView(){
+        this.transaksiService = new TransaksiService(); // Inisialisasi transaksiService
         // label
         Label title = new Label("Tambah Transaksi");
 
@@ -36,9 +44,32 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         Button tambahButton = new Button("Tambah");
 
         // tabel transaksi
-        TableView<?> transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
-        // ? di Java disebut wildcard generic = TableView ini menyimpan objek apa saja, saya belum menentukan tipenya
-    
+        TableView<Transaksi> transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
+        transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
+
+        // kolom keterangan
+        TableColumn<Transaksi, String> keteranganColumn = new TableColumn<>("Keterangan"); // TableColumn untuk kolom keterangan, tipe data String
+        keteranganColumn.setCellValueFactory(new PropertyValueFactory<>("keterangan")); // setCellValueFactory untuk menghubungkan kolom dengan properti keterangan dalam model Transaksi
+        keteranganColumn.setPrefWidth(250); // setPrefWidth untuk mengatur lebar kolom keterangan
+
+        // kolom nominal
+        TableColumn<Transaksi, Double> nominalColumn = new TableColumn<>("Nominal");
+        nominalColumn.setCellValueFactory(new PropertyValueFactory<>("nominal")); // PropertyValueFactory untuk menghubungkan kolom dengan properti nominal dalam model Transaksi
+        nominalColumn.setPrefWidth(150);
+
+        // kolom tipe
+        TableColumn<Transaksi, String> tipeColumn = new TableColumn<>("Tipe");
+        tipeColumn.setCellValueFactory(new PropertyValueFactory<>("tipe")); // PropertyValueFactory untuk menghubungkan kolom dengan properti tipe dalam model Transaksi
+        tipeColumn.setPrefWidth(150);
+        // kolom tanggal
+        TableColumn<Transaksi, String> tanggalColumn = new TableColumn<>("Tanggal");
+        tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
+        tanggalColumn.setPrefWidth(150);
+        
+        transaksiTable.setPrefHeight(300); // setPrefHeight untuk mengatur tinggi tabel transaksi
+        
+        transaksiTable.getColumns().addAll(keteranganColumn, nominalColumn, tipeColumn, tanggalColumn); // Menambahkan kolom-kolom ke dalam tabel transaksi
+
         // layout
         setSpacing(10); // setSpacing untuk memberikan jarak antar elemen dalam VBox
         getChildren().addAll(
