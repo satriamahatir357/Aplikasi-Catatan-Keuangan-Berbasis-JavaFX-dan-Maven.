@@ -15,31 +15,39 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
 
         // === Header ===
         Label title = new Label("DOMPETKU"); // Membuat sebuah objek Label yang akan digunakan sebagai judul dalam aplikasi. Label adalah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Dengan membuat objek
+        title.getStyleClass().add("header-title"); // memaanggil css header-title
 
         VBox header = new VBox(title); // Membuat sebuah objek VBox yang akan digunakan sebagai header dalam aplikasi. VBox adalah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. Dengan membuat objek VBox, kita dapat menambahkan elemen-elemen seperti judul "DOMPETKU" ke dalamnya, sehingga akan ditampilkan secara vertikal di bagian atas aplikasi.
+        header.getStyleClass().add("header"); // memanggil css header
         header.setAlignment(Pos.CENTER); // Mengatur posisi elemen di dalam header agar berada di tengah secara horizontal dan vertikal menggunakan metode setAlignment() dengan parameter Pos.CENTER.
 
         // === SIDEBAR ===
 
         Button dashboardButton = new Button("Dashboard");
         Button transaksiButton = new Button("Transaksi");
+        dashboardButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
+        transaksiButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
 
         VBox sidebar = new VBox( // Membuat sebuah objek VBox yang akan digunakan sebagai sidebar dalam aplikasi. VBox adalah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. Dengan membuat objek VBox, kita dapat menambahkan tombol-tombol navigasi seperti dashboardButton dan transaksiButton ke dalamnya, sehingga akan ditampilkan secara vertikal di sisi kiri aplikasi.
                 dashboardButton,
                 transaksiButton
         );
+        sidebar.getStyleClass().add("sidebar"); // memanggil css sidebar
 
         dashboardButton.setPrefWidth(120); // Mengatur lebar tombol dashboardButton dan transaksiButton menjadi 120 piksel menggunakan metode setPrefWidth(120) dari objek tombol, sehingga tombol-tombol tersebut memiliki ukuran yang konsisten dan mudah untuk diklik oleh pengguna.
         transaksiButton.setPrefWidth(120); // Mengatur lebar tombol dashboardButton dan transaksiButton menjadi 120 piksel menggunakan metode setPrefWidth(120) dari objek tombol, sehingga tombol-tombol tersebut memiliki ukuran yang konsisten dan mudah untuk diklik oleh pengguna.
 
         sidebar.setSpacing(20); // Mengatur jarak vertikal antara tombol-tombol di dalam sidebar sebesar 20 piksel menggunakan metode setSpacing(20) dari objek sidebar, sehingga tombol-tombol tersebut tidak terlalu berdekatan dan tampilan menjadi lebih rapi.
-        sidebar.setStyle("-fx-padding: 20;"); // Mengatur padding (jarak antara tepi sidebar dengan elemen di dalamnya) sebesar 20 piksel menggunakan metode setStyle() dengan parameter "-fx-padding: 20;". Ini akan memberikan ruang yang cukup antara tepi sidebar dan tombol-tombol navigasi di dalamnya, sehingga tampilan menjadi lebih rapi dan nyaman untuk dilihat.
+        sidebar.setStyle("-fx-padding: 20;"); // Mengatur padding (jarak antara tepi sidebar dengan elemen di dalamnya) sebesar 20 piksel menggunakan metode setStyle() dengan parameter "-fx-padding: 20;". Ini akan memberikan ruang yang cukup antara tepi sidebar dan tombol-tombol navigasi di dalamnya, sehingga tampilan
         header.setPrefHeight(60); // Mengatur tinggi header menjadi 60 piksel menggunakan metode setPrefHeight() dari objek header, sehingga akan memberikan ruang
 
         // === CONTENT AREA ===
         StackPane contentArea = new StackPane(); // StackPane adalah sebuah kelas dalam JavaFX yang digunakan untuk menumpuk elemen-elemen UI di atas satu sama lain. StackPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan, sehingga elemen yang terakhir ditambahkan akan berada di atas elemen sebelumnya.
+        contentArea.getStyleClass().add("content-area"); // memanggil css content-area
+
         DashboardView dashboardView = new DashboardView(); // Membuat sebuah objek DashboardView yang akan digunakan sebagai tampilan utama dalam area konten. DashboardView adalah kelas yang berisi tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
         TransaksiView transaksiView = new TransaksiView(); // Membuat sebuah objek TransaksiView yang akan digunakan sebagai tampilan untuk menambahkan transaksi baru. TransaksiView adalah kelas yang berisi tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
+        contentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea, sehingga ketika aplikasi dijalankan, tampilan DashboardView akan ditampilkan sebagai tampilan utama di area konten.
         
         dashboardButton.setOnAction(e ->{
             contentArea.getChildren().clear();

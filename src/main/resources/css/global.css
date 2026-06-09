@@ -1,0 +1,41 @@
+.root {
+    -fx-background-color: #F8FAFC;
+    -fx-font-family: "Segoe UI";
+}
+
+/* HEADER */
+.header {
+    -fx-background-color: #2563EB;
+    -fx-padding: 15px;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* sidebar */
+.sidebar {
+    -fx-background-color: white;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-pref-width: 220;
+}
+
+/* button menu */
+.sidebar-button{
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white; 
+    -fx-background-radius: 8px;
+    -fx-padding: 10px;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #1D4ED8;  /* Warna yang lebih gelap saat hover */
+}
+
+/* content */
+.content-area{
+    -fx-padding: 30px;
+}
