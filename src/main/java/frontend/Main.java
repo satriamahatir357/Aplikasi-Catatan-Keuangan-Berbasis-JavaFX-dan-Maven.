@@ -13,7 +13,12 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass()
                 .getResource("/css/global.css") // getResource("/css/global.css") digunakan untuk mendapatkan URL dari file CSS yang berada di dalam folder resources/css dengan nama global.css. Ini memungkinkan aplikasi untuk memuat file CSS yang berisi aturan gaya untuk tampilan aplikasi.
                 .toExternalForm() // toExternalForm() digunakan untuk mengonversi URL yang diperoleh dari getResource() menjadi format yang dapat digunakan oleh JavaFX untuk memuat file CSS.
-            );   
+            );
+            
+        scene.getStylesheets().add(getClass()
+                .getResource("/css/dashboard.css")
+                .toExternalForm()
+        );
         
         stage.setTitle("Dompetku"); // Mengatur judul jendela aplikasi JavaFX menjadi "Dompetku" menggunakan metode setTitle() dari objek stage.
         stage.setScene(scene); // Menetapkan scene yang telah dibuat sebelumnya ke dalam stage menggunakan metode setScene() dari objek stage, sehingga DashboardView akan ditampilkan saat aplikasi dijalankan.

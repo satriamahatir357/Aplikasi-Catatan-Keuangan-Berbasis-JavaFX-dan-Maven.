@@ -11,30 +11,45 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
         // Card Pemasukan
         Label pemasukanTitle = new Label("Total Pemasukan");
+        pemasukanTitle.getStyleClass().add("card-title");
+        
         Label pemasukanValue = new Label("Rp 0");
-
+        pemasukanValue.getStyleClass().add("card-value");
+        
         VBox pemasukanCard = new VBox(
                 pemasukanTitle,
                 pemasukanValue
         );
+        pemasukanCard.getStyleClass().add("dashboard-card");
+        pemasukanCard.getStyleClass().add("income-card");
 
         // Card Pengeluaran
         Label pengeluaranTitle = new Label("Total Pengeluaran");
+        pengeluaranTitle.getStyleClass().add("card-title");
+        
         Label pengeluaranValue = new Label("Rp 0");
-
+        pengeluaranValue.getStyleClass().add("card-value");
+        
         VBox pengeluaranCard = new VBox(
                 pengeluaranTitle,
                 pengeluaranValue
         );
-
+        pengeluaranCard.getStyleClass().add("dashboard-card");
+        pengeluaranCard.getStyleClass().add("expense-card");
+        
         // Card Saldo
         Label saldoTitle = new Label("Saldo");
+        saldoTitle.getStyleClass().add("card-title");
+        
         Label saldoValue = new Label("Rp 0");
+        saldoValue.getStyleClass().add("card-value");
 
         VBox saldoCard = new VBox(
                 saldoTitle,
                 saldoValue
         );
+        saldoCard.getStyleClass().add("dashboard-card");
+        saldoCard.getStyleClass().add("balance-card");
 
         // Container untuk semua card
         HBox cardContainer = new HBox(

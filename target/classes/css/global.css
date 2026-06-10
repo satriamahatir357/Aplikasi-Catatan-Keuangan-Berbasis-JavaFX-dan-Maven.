@@ -39,3 +39,7 @@
 .content-area{
     -fx-padding: 30px;
 }
+
+.sidebar-button-active{
+    -fx-background-color: #1e3a8a;   
+}
