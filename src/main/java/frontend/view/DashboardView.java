@@ -59,11 +59,9 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         );
 
         // Styling Layout
-        setSpacing(20);
-        setAlignment(Pos.CENTER);
+        getStyleClass().add("dashboard-view");
 
-        cardContainer.setSpacing(20);
-        cardContainer.setAlignment(Pos.CENTER);
+        cardContainer.getStyleClass().add("card-container");
 
         // Masukkan card ke DashboardView
         getChildren().add(cardContainer);

@@ -40,8 +40,6 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
         dashboardButton.setPrefWidth(120); // Mengatur lebar tombol dashboardButton dan transaksiButton menjadi 120 piksel menggunakan metode setPrefWidth(120) dari objek tombol, sehingga tombol-tombol tersebut memiliki ukuran yang konsisten dan mudah untuk diklik oleh pengguna.
         transaksiButton.setPrefWidth(120); // Mengatur lebar tombol dashboardButton dan transaksiButton menjadi 120 piksel menggunakan metode setPrefWidth(120) dari objek tombol, sehingga tombol-tombol tersebut memiliki ukuran yang konsisten dan mudah untuk diklik oleh pengguna.
 
-        sidebar.setSpacing(20); // Mengatur jarak vertikal antara tombol-tombol di dalam sidebar sebesar 20 piksel menggunakan metode setSpacing(20) dari objek sidebar, sehingga tombol-tombol tersebut tidak terlalu berdekatan dan tampilan menjadi lebih rapi.
-        sidebar.setStyle("-fx-padding: 20;"); // Mengatur padding (jarak antara tepi sidebar dengan elemen di dalamnya) sebesar 20 piksel menggunakan metode setStyle() dengan parameter "-fx-padding: 20;". Ini akan memberikan ruang yang cukup antara tepi sidebar dan tombol-tombol navigasi di dalamnya, sehingga tampilan
         header.setPrefHeight(60); // Mengatur tinggi header menjadi 60 piksel menggunakan metode setPrefHeight() dari objek header, sehingga akan memberikan ruang
 
         // === CONTENT AREA ===
@@ -53,8 +51,8 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
         contentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea, sehingga ketika aplikasi dijalankan, tampilan DashboardView akan ditampilkan sebagai tampilan utama di area konten.
         
         dashboardButton.setOnAction(e ->{
-            dashboardButton.getStyleClass().add("sidebar-button-active");
             transaksiButton.getStyleClass().remove("sidebar-button-active");
+            dashboardButton.getStyleClass().add("sidebar-button-active");
             
             contentArea.getChildren().clear();
             contentArea.getChildren().add(dashboardView);

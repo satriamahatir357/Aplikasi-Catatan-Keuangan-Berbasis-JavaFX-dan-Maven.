@@ -21,6 +21,9 @@
     -fx-padding: 20;
     -fx-spacing: 15;
     -fx-pref-width: 220;
+
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 1 0 0;
 }
 
 /* button menu */
@@ -41,5 +44,6 @@
 }
 
 .sidebar-button-active{
-    -fx-background-color: #1e3a8a;   
+    -fx-background-color: #1e3a8a;
+    
 }
