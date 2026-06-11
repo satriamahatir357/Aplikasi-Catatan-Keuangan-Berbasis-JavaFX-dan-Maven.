@@ -27,7 +27,7 @@
 }
 
 .from-date{
-    -fx-bacground-color: white;
+    -fx-background-color: white;
     -fx-background-radius: 8px;
     -fx-border-color:#CBD5E1;
     -fx-border-radius:8px;
@@ -65,13 +65,12 @@
 
 .transaksi-table .column-header {
     -fx-background-color: #F8FAFC;
-    -fx-border-color: #E2E8F0;
 }
 
-.transaksi-table.column-header.label{
+.transaksi-table .column-header .label{
     -fx-text-fill: #1E293B;
     -fx-font-weight: bold;
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
 }
 
 .transaksi-table .column-header{
@@ -83,7 +82,7 @@
 }
 
 .transaksi-table .table-row-cell:hover{
-    -fx-background-color: #F1F5F9;
+    -fx-background-color: #EFF6FF;
 }
 
 .transaksi-table .table-row-cell:selected { /*:selected itu kondisi ketika baris atau item sedang dipilih (selected) oleh user.*/
@@ -95,7 +94,7 @@
 }
 
 /* Form Card */
-.form-card{
+.from-card{
     -fx-background-color: white;
     -fx-background-radius: 12;
 
@@ -113,6 +112,27 @@
 }
 
 /* Table Card */
+.table-card{
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12;
+
+    -fx-padding: 20;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.08),
+        10,0,0,2
+    );
+}
+
 .transaksi-view{
     -fx-spacing: 20;
+}
+
+.empty-table-label{
+    -fx-font-size: 14px;
+    -fx-text-fill: #94A3B8;
 }

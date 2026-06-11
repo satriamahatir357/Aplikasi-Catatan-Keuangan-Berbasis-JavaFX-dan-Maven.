@@ -29,10 +29,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
         keteranganField.setPromptText("Masukkan Keterangan"); //setPromptText untuk memberikan petunjuk pada TextField
         keteranganField.getStyleClass().add("from-input");
-    
+        
         // input nominal
         TextField nominalField = new TextField();
         nominalField.setPromptText("Masukkan Nominal");
+        nominalField.getStyleClass().add("from-input");
 
         // pilihan tipe
         ComboBox<String> tipeBox = new ComboBox<>( // ComboBox<string> untuk membuat dropdown pilihan tipe
@@ -75,6 +76,12 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         tanggalColumn.setPrefWidth(150);
         
         transaksiTable.setPrefHeight(300); // setPrefHeight untuk mengatur tinggi tabel transaksi
+        
+        // Empty State Table
+        Label emptyLabel = new Label("Belum ada transaksi");
+        emptyLabel.getStyleClass().add("empty-table-label");
+
+        transaksiTable.setPlaceholder(emptyLabel);
         
         transaksiTable.getColumns().addAll(keteranganColumn, nominalColumn, tipeColumn, tanggalColumn); // Menambahkan kolom-kolom ke dalam tabel transaksi
 
