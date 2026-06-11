@@ -18,13 +18,17 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
 
     public TransaksiView(){
+        getStyleClass().add("transaksi-view"); // ini css TransaksiView
         this.transaksiService = new TransaksiService(); // Inisialisasi transaksiService
+        
         // label
         Label title = new Label("Tambah Transaksi");
+        title.getStyleClass().add("form-title");
 
         // input keterangan
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
         keteranganField.setPromptText("Masukkan Keterangan"); //setPromptText untuk memberikan petunjuk pada TextField
+        keteranganField.getStyleClass().add("from-input");
     
         // input nominal
         TextField nominalField = new TextField();
@@ -36,16 +40,20 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         );
 
         tipeBox.setValue("Pemasukan"); // setValue untuk menetapkan nilai default pada ComboBox
-
+        tipeBox.getStyleClass().add("from-combo");
+        
         // pilih tanggal
         DatePicker tanggalPicker = new DatePicker(); // DatePicker untuk memilih tanggal
+        tanggalPicker.getStyleClass().add("from-date");
 
         // tombol tambah
         Button tambahButton = new Button("Tambah");
+        tambahButton.getStyleClass().add("primary-button");
 
         // tabel transaksi
         TableView<Transaksi> transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
         transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
+        transaksiTable.getStyleClass().add("transaksi-table");
 
         // kolom keterangan
         TableColumn<Transaksi, String> keteranganColumn = new TableColumn<>("Keterangan"); // TableColumn untuk kolom keterangan, tipe data String
@@ -72,14 +80,29 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         // layout
         setSpacing(10); // setSpacing untuk memberikan jarak antar elemen dalam VBox
-        getChildren().addAll(
+
+        Label tableTitle = new Label("Daftar Transaksi");
+        tableTitle.getStyleClass().add("form-title");
+
+        VBox fromCard = new VBox(
             title,
             keteranganField,
             nominalField,
             tipeBox,
             tanggalPicker,
-            tambahButton,
+            tambahButton
+        );
+        fromCard.getStyleClass().add("from-card");
+
+        VBox tableCard = new VBox(
+            tableTitle,
             transaksiTable
+        );
+        tableCard.getStyleClass().add("table-card");
+
+        getChildren().addAll(
+            fromCard,
+            tableCard
         );
 
         // event handler untuk tombol tambah

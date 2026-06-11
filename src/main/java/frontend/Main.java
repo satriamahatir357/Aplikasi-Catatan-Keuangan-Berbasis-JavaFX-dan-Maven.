@@ -20,6 +20,11 @@ public class Main extends Application {
                 .toExternalForm()
         );
         
+        scene.getStylesheets().add(getClass()
+                .getResource("/css/transaksi.css")
+                .toExternalForm()
+        );
+        
         stage.setTitle("Dompetku"); // Mengatur judul jendela aplikasi JavaFX menjadi "Dompetku" menggunakan metode setTitle() dari objek stage.
         stage.setScene(scene); // Menetapkan scene yang telah dibuat sebelumnya ke dalam stage menggunakan metode setScene() dari objek stage, sehingga DashboardView akan ditampilkan saat aplikasi dijalankan.
         stage.show(); // Menampilkan jendela aplikasi JavaFX dengan memanggil metode show() dari objek stage, sehingga pengguna dapat melihat tampilan DashboardView yang telah dibuat.

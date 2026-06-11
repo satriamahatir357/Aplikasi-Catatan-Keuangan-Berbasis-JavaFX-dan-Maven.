@@ -1,0 +1,118 @@
+.transaksi-view{
+    -fx-spacing: 15;
+    -fx-padding: 20;
+}
+
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E293B;
+}
+
+.from-input{
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color:  #CBD5E1;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+}
+
+.from-combo{
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color:#CBD5E1;
+    -fx-border-radius: 8px;
+    -fx-font-size:14px;
+}
+
+.from-date{
+    -fx-bacground-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color:#CBD5E1;
+    -fx-border-radius:8px;
+}
+
+.primary-button{
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight:bold;
+    -fx-background-radius: 8px;
+    -fx-padding:10px 20px;
+}
+
+.primary-button:hover{
+    -fx-background-color: #1D4ED8;
+}
+
+.primary-button:pressed{ /* pressed = Terjadi saat Tombol sedang diklik Alias Mouse down*/
+    -fx-background-color: #1E40AF;
+}
+
+.transaksi-table {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+
+    -fx-effect: dropshadow(  /* dropshadow() itu efek bayangan (shadow) di JavaFX CSS, supaya komponen terlihat sedikit "mengambang" dan tidak terlalu datar.  */
+        gaussian, /* Jenis blur yang dipakai. Hasilnya halus dan natural.*/
+        rgba(0,0,0,0.08),
+        10,0,0,2
+    );
+}
+
+.transaksi-table .column-header {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #E2E8F0;
+}
+
+.transaksi-table.column-header.label{
+    -fx-text-fill: #1E293B;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.transaksi-table .column-header{
+    -fx-pref-height: 40px;
+}
+
+.transaksi-table .table-row-cell{
+    -fx-cell-size: 40px; /*-fx-cell-size digunakan untuk mengatur tinggi setiap baris (row) pada komponen seperti TableView, ListView, dan TreeView.*/
+}
+
+.transaksi-table .table-row-cell:hover{
+    -fx-background-color: #F1F5F9;
+}
+
+.transaksi-table .table-row-cell:selected { /*:selected itu kondisi ketika baris atau item sedang dipilih (selected) oleh user.*/
+    -fx-background-color: #DBEAFE;
+}
+
+.transaksi-table .table-row-cell:selected .text {
+    -fx-fill: #1E293B;
+}
+
+/* Form Card */
+.form-card{
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12;
+
+    -fx-padding: 20;
+    -fx-spacing: 15;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.08),
+        10,0,0,2
+    );
+}
+
+/* Table Card */
+.transaksi-view{
+    -fx-spacing: 20;
+}
