@@ -136,3 +136,12 @@
     -fx-font-size: 14px;
     -fx-text-fill: #94A3B8;
 }
+/* scroll ui */
+.transaksi-scroll{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.transaksi-scroll > .viewport{
+    -fx-background-color: transparent;
+}

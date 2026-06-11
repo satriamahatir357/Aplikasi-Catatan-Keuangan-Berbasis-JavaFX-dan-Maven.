@@ -5,11 +5,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ScrollPane;
 
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
@@ -18,12 +20,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
 
     public TransaksiView(){
-        getStyleClass().add("transaksi-view"); // ini css TransaksiView
         this.transaksiService = new TransaksiService(); // Inisialisasi transaksiService
         
         // label
         Label title = new Label("Tambah Transaksi");
-        title.getStyleClass().add("form-title");
+        title.getStyleClass().add("from-title");
 
         // input keterangan
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
@@ -107,10 +108,21 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         );
         tableCard.getStyleClass().add("table-card");
 
-        getChildren().addAll(
+        VBox content = new VBox(
             fromCard,
             tableCard
         );
+
+        // scroll ui
+        content.getStyleClass().add("transaksi-view");
+
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true); //setFitToWidth(true) = Lebar isi ScrollPane akan mengikuti lebar ScrollPane.
+        scrollPane.setPannable(true); // setPannable(true) = Isi ScrollPane bisa digeser (drag) menggunakan mouse atau touchpad.
+
+        getChildren().add(scrollPane);
+        scrollPane.getStyleClass().add("transaksi-scroll");
+
 
         // event handler untuk tombol tambah
         tambahButton.setOnAction(e -> {
@@ -125,6 +137,13 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             Transaksi transaksi = new Transaksi(keterangan, nominal, tipe, tanggal);
 
             transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
+            
+            // scroll ui
+            keteranganField.clear();
+            nominalField.clear();
+            tanggalPicker.setValue(null);
+            tipeBox.setValue("Pemasukan");
+        
         });
 
 
