@@ -134,25 +134,15 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
             // input keterangan
             String keterangan = keteranganField.getText(); // Mengambil teks dari keteranganField dan menyimpannya dalam variabel keterangan
-            if (keterangan.isBlank()){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Validasi");
-                alert.setHeaderText(null);
-                alert.setContentText("Keterangan tidak boleh kosong");
-
-                alert.showAndWait(); // Tampilkan popup, lalu tunggu user menekan OK sebelum lanjut menjalankan kode. 
-                return; // ketika kosong akan menampilkan popup nya
+            if (keterangan.isBlank()) {
+                showWarning("Keterangan tidak boleh kosong!");
+                return;
             }
 
             // == input nominal ==
             // validasi ketika kosong
-            if(nominalField.getText().isBlank()){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Validasi");
-                alert.setHeaderText(null);
-                alert.setContentText("Keterangan tidak boleh kosong");
-
-                alert.showAndWait();
+            if (nominalField.getText().isBlank()) {
+                showWarning("Nominal tidak boleh kosong!");
                 return;
             }
             
@@ -162,26 +152,16 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             try {
                 nominal = Double.parseDouble(nominalField.getText());
             }catch (NumberFormatException ex) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Validasi");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Nominal harus berupa angka!");
-        
-                    alert.showAndWait();
-                    return;
-                }            
+                showWarning("Nominal harus berupa angka!");
+                return;
+            }
 
             // memilih pemasukan atau pengeluaran
             String tipe = tipeBox.getValue(); // Mengambil nilai yang dipilih dari tipeBox dan menyimpannya dalam variabel tipe
             
             // memilih tanggal transaksi
-            if(tanggalPicker.getValue() == null){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Validasi");
-                alert.setHeaderText(null);
-                alert.setContentText("Tanggal belum dipilih!");
-
-                alert.showAndWait();
+            if (tanggalPicker.getValue() == null) {
+                showWarning("Tanggal harus dipilih!");
                 return;
             }
 
@@ -201,8 +181,22 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tipeBox.setValue("Pemasukan");
         
         });
+    }
+    private void showWarning(String message) {
 
+        Alert alert = new Alert(Alert.AlertType.WARNING);
 
+        alert.setTitle("Validasi");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        alert.getDialogPane().getStylesheets().add(
+            getClass().getResource("/css/transaksi.css").toExternalForm()
+        );
+
+        alert.getDialogPane().getStyleClass().add("custom-alert");
+
+        alert.showAndWait();
     }
     
 }
