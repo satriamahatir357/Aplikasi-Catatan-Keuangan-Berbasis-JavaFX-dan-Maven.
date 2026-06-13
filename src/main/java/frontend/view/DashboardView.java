@@ -6,6 +6,9 @@ import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yan
 import javafx.scene.layout.HBox; // HBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara horizontal. HBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari kiri ke kanan.
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class DashboardView extends VBox { // DashboardView adalah sebuah kelas yang merupakan turunan dari VBox, yang digunakan untuk membuat tampilan dashboard dalam aplikasi. DashboardView akan menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
 
         // field class
@@ -82,9 +85,16 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
     public void updateDashboard(double pemasukan, double pengeluaran){
             double saldo = pemasukan - pengeluaran;
 
-                pemasukanValue.setText("Rp " + pemasukan);
-                pengeluaranValue.setText("Rp " + pengeluaran);
-                saldoValue.setText("Rp " + saldo);
+             // Formatter mata uang Rupiah Indonesia
+            NumberFormat rupiah =
+                NumberFormat.getCurrencyInstance( // getCurrencyInstance() adalah method dari class NumberFormat yang digunakan untuk membuat formatter mata uang.
+                new Locale("id", "ID")
+            );
+
+            // Tampilkan data ke dashboard dalam format Rupiah
+            pemasukanValue.setText(rupiah.format(pemasukan));
+            pengeluaranValue.setText(rupiah.format(pengeluaran));
+            saldoValue.setText(rupiah.format(saldo));
         }
 
     // Method refreshDashboard
