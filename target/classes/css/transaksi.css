@@ -146,7 +146,7 @@
     -fx-background-color: transparent;
 }
 
-/* === Alert === */
+/* === Alert tambah button === */
 /* Alert Dialog */
 .custom-alert{
     -fx-background-color: white;
@@ -166,7 +166,7 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 8px;
-    -fx-cusor: hand;
+    -fx-cursor: hand;
 }
 
 /* Hover tombol */
@@ -180,17 +180,54 @@
 }
 
 /* === hapus button === */
-.denger-button{
+.danger-button{
     -fx-background-color: #ef4444;
     -fx-text-fill: white;
     -fx-font-weight:bold;
     -fx-background-radius: 8px;
 }
 
-.denger-button:hover{
+.danger-button:hover{
     -fx-background-color: #dc2626;
 }
 
-.denger-button:pressed{
+.danger-button:pressed{
     -fx-background-color: #b91c1c;
+}
+
+/* === alert hapus button === */
+/* Confirmation Dialog */
+.custom-confirm {
+    -fx-background-color: white;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1;
+}
+
+/* Teks */
+.custom-confirm .content.label {
+    -fx-text-fill: #1E293B;
+    -fx-font-size: 14px;
+}
+
+/* Tombol OK dan Cancel */
+.custom-confirm .button {
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+/* Tombol Cancel */
+.secondary-button{
+    -fx-background-color: #E2E8F0;
+    -fx-text-fill: #1E293B;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+}
+
+.secondary-button:hover{
+    -fx-background-color: #CBD5E1;
+}
+
+.secondary-button:pressed{
+    -fx-background-color: #94A3B8;
 }

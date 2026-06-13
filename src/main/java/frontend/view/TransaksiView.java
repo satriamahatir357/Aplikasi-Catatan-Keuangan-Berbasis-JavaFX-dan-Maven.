@@ -2,6 +2,7 @@ package frontend.view;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -13,6 +14,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert; // komponen popup dialog bawaan JavaFX yang dipakai untuk menampilkan pesan ke user.
+
+import java.util.Optional;
 
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
@@ -58,7 +61,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         // tombol hapus
         Button hapusButton = new Button("Hapus");
-        hapusButton.getStyleClass().add("denger-button");
+        hapusButton.getStyleClass().add("danger-button");
 
         // tabel transaksi
         TableView<Transaksi> transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
@@ -198,7 +201,41 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 showWarning("Pilih transaksi terlebih dahulu");
                 return;
             }
-        });
+
+            // Konfirmasi Hapus
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            
+            confirm.setTitle("Konfirmasi");
+            confirm.setHeaderText(null);
+            confirm.setContentText("Yakin ingin menghapus transaksi ini?");
+
+            // css alert hapus button
+            confirm.getDialogPane().getStylesheets().add(
+                getClass().getResource("/css/transaksi.css").toExternalForm()
+            );
+            confirm.getDialogPane().getStyleClass().add("custom-confirm");
+
+            Button okButton = (Button)
+                            confirm.getDialogPane()
+                            .lookupButton(ButtonType.OK);
+
+            okButton.getStyleClass().add("danger-button");
+
+            Button cancelButton = (Button)
+                            confirm.getDialogPane()
+                            .lookupButton(ButtonType.CANCEL);
+
+            cancelButton.getStyleClass().add("secondary-button");   
+
+            // TAMPILKAN POPUP
+            Optional<ButtonType> result = confirm.showAndWait();
+
+            if (result.isPresent() && 
+                result.get() == ButtonType.OK) { // Kalau user memilih sesuatu DAN pilihannya adalah OK maka jalankan proses hapus.
+                     // hapus transaksi
+                }
+
+            });
     }
     private void showWarning(String message) {
 
