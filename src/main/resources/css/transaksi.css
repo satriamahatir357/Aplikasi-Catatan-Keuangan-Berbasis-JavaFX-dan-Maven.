@@ -164,7 +164,7 @@
 .custom-alert .button{
     -fx-background-color:  #2563EB;
     -fx-text-fill: white;
-    -fx-text-weight: bold;
+    -fx-font-weight: bold;
     -fx-background-radius: 8px;
     -fx-cusor: hand;
 }
@@ -177,4 +177,20 @@
 /* Saat ditekan */
 .custom-alert .button:pressed {
     -fx-background-color: #1E40AF;
+}
+
+/* === hapus button === */
+.denger-button{
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+    -fx-font-weight:bold;
+    -fx-background-radius: 8px;
+}
+
+.denger-button:hover{
+    -fx-background-color: #dc2626;
+}
+
+.denger-button:pressed{
+    -fx-background-color: #b91c1c;
 }

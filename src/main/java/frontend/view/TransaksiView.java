@@ -56,6 +56,10 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         Button tambahButton = new Button("Tambah");
         tambahButton.getStyleClass().add("primary-button");
 
+        // tombol hapus
+        Button hapusButton = new Button("Hapus");
+        hapusButton.getStyleClass().add("denger-button");
+
         // tabel transaksi
         TableView<Transaksi> transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
         transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
@@ -102,7 +106,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             nominalField,
             tipeBox,
             tanggalPicker,
-            tambahButton
+            tambahButton,
+            hapusButton
         );
         fromCard.getStyleClass().add("from-card");
 
@@ -180,6 +185,19 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tanggalPicker.setValue(null);
             tipeBox.setValue("Pemasukan");
         
+        });
+
+        // === Hapus Button ===
+        hapusButton.setOnAction(e ->{
+            // Ambil transaksi yang dipilih
+            Transaksi selected = transaksiTable.getSelectionModel() //Ambil objek yang bertugas mengelola pemilihan (selection) pada TableView.
+                                .getSelectedItem(); // Ambil data/baris yang sedang dipilih
+
+            // validasi
+            if(selected == null){
+                showWarning("Pilih transaksi terlebih dahulu");
+                return;
+            }
         });
     }
     private void showWarning(String message) {
