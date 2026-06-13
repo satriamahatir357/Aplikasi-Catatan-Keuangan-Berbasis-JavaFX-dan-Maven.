@@ -17,11 +17,14 @@ import backend.TransaksiService; // Mengimpor kelas TransaksiService dari packag
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
 
 public class TransaksiView extends VBox { // extends VBox untuk membuat layout vertikal
+    
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
+    private DashboardView dashboardView;
 
-    public TransaksiView(){
-        this.transaksiService = new TransaksiService(); // Inisialisasi transaksiService
-        
+    public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
+         this.transaksiService = transaksiService;
+         this.dashboardView = dashboardView;
+
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
@@ -137,7 +140,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             Transaksi transaksi = new Transaksi(keterangan, nominal, tipe, tanggal);
 
             transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
-            
+            dashboardView.refreshDashboard(); 
+
             // scroll ui
             keteranganField.clear();
             nominalField.clear();

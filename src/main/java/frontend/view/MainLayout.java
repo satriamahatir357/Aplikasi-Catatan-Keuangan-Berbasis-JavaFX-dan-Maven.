@@ -6,12 +6,16 @@ import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yan
 import javafx.scene.layout.BorderPane; // BorderPane adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen UI dalam aplikasi. BorderPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya
 import javafx.scene.layout.StackPane; // StackPane adalah sebuah kelas dalam JavaFX yang digunakan untuk menumpuk elemen-elemen UI di atas satu sama lain. StackPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan, sehingga elemen yang terakhir ditambahkan akan berada di atas elemen sebelumnya.
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
-
+import backend.TransaksiService;
 import frontend.view.DashboardView; // Mengimpor kelas DashboardView dari package frontend.view, yang merupakan tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
 import frontend.view.TransaksiView; // Mengimpor kelas TransaksiView dari package frontend.view, yang merupakan tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
 
 public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen UI dalam aplikasi. BorderPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya dengan cara yang terstruktur, seperti menempatkan elemen di bagian atas, bawah, kiri, kanan, dan tengah aplikasi. Dengan menggunakan BorderPane, Anda dapat dengan mudah mengatur tampilan aplikasi Anda sesuai dengan kebutuhan desain yang diinginkan.
+    
+    private TransaksiService transaksiService;
+
     public MainLayout() {
+        transaksiService = new TransaksiService();
 
         // === Header ===
         Label title = new Label("DOMPETKU"); // Membuat sebuah objek Label yang akan digunakan sebagai judul dalam aplikasi. Label adalah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Dengan membuat objek
@@ -46,13 +50,14 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
         StackPane contentArea = new StackPane(); // StackPane adalah sebuah kelas dalam JavaFX yang digunakan untuk menumpuk elemen-elemen UI di atas satu sama lain. StackPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan, sehingga elemen yang terakhir ditambahkan akan berada di atas elemen sebelumnya.
         contentArea.getStyleClass().add("content-area"); // memanggil css content-area
 
-        DashboardView dashboardView = new DashboardView(); // Membuat sebuah objek DashboardView yang akan digunakan sebagai tampilan utama dalam area konten. DashboardView adalah kelas yang berisi tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
-        TransaksiView transaksiView = new TransaksiView(); // Membuat sebuah objek TransaksiView yang akan digunakan sebagai tampilan untuk menambahkan transaksi baru. TransaksiView adalah kelas yang berisi tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
+        DashboardView dashboardView = new DashboardView(transaksiService); // Membuat sebuah objek DashboardView yang akan digunakan sebagai tampilan utama dalam area konten. DashboardView adalah kelas yang berisi tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
+        
+        TransaksiView transaksiView = new TransaksiView(transaksiService, dashboardView); // Membuat sebuah objek TransaksiView yang akan digunakan sebagai tampilan untuk menambahkan transaksi baru. TransaksiView adalah kelas yang berisi tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
         contentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea, sehingga ketika aplikasi dijalankan, tampilan DashboardView akan ditampilkan sebagai tampilan utama di area konten.
         
         dashboardButton.setOnAction(e ->{
-            transaksiButton.getStyleClass().remove("sidebar-button-active");
             dashboardButton.getStyleClass().add("sidebar-button-active");
+            transaksiButton.getStyleClass().remove("sidebar-button-active");
             
             contentArea.getChildren().clear();
             contentArea.getChildren().add(dashboardView);
@@ -72,5 +77,6 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
         setCenter(contentArea); // Menempatkan contentArea di bagian tengah BorderPane, sehingga akan menampilkan DashboardView sebagai tampilan utama saat aplikasi dijalankan.
 
     }
+
     
 }
