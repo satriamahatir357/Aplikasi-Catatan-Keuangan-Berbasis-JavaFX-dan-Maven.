@@ -232,7 +232,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
             if (result.isPresent() && 
                 result.get() == ButtonType.OK) { // Kalau user memilih sesuatu DAN pilihannya adalah OK maka jalankan proses hapus.
-                     // hapus transaksi
+                    transaksiService.hapusTransaksi(selected); // memanggil method hapusTransaksi dari transaksiService
+                    dashboardView.refreshDashboard(); // memanggi method dari dashboardView
                 }
 
             });
