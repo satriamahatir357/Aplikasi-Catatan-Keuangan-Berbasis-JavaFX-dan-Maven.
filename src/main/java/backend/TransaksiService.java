@@ -6,6 +6,7 @@ import javafx.collections.FXCollections; // FXCollections adalah sebuah kelas ut
 import javafx.collections.ObservableList; // ObservableList adalah sebuah interface yang digunakan untuk menyimpan data dalam bentuk list yang dapat diamati (observable).
 
 import model.Transaksi;
+import storage.CSVHelper;
 
 // Tempat Penyimpanan Data
 public class TransaksiService {
@@ -19,11 +20,15 @@ public class TransaksiService {
     // Method tambahTransaksi()
     public void tambahTransaksi(Transaksi transaksi){ // tambahTransaksi() adalah sebuah metode yang digunakan untuk menambahkan transaksi baru ke dalam daftarTransaksi.
         daftarTransaksi.add(transaksi); // Menambahkan transaksi baru ke dalam daftarTransaksi menggunakan metode add() dari ObservableList.
+        
+        CSVHelper.saveToCSV(daftarTransaksi); // Artinya: Tambah transaksi -> Masuk ObservableList -> Simpan ke CSV
     }
 
     // Method hapusTransaksi()
     public void hapusTransaksi(Transaksi transaksi){ // hapusTransaksi() adalah sebuah metode yang digunakan untuk menghapus transaksi dari daftarTransaksi.
         daftarTransaksi.remove(transaksi); // Menghapus transaksi dari daftarTransaksi menggunakan metode remove() dari ObservableList.
+    
+        CSVHelper.saveToCSV(daftarTransaksi); // Artinya: hapus transaksi -> update ObservableList -> Tulis ulang CSV
     }
 
     // Method getTotalPemasukan()
