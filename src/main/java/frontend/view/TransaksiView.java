@@ -15,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert; // komponen popup dialog bawaan JavaFX yang dipakai untuk menampilkan pesan ke user.
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
@@ -24,6 +25,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
     private DashboardView dashboardView;
+    private Transaksi transaksiYangDiedit = null;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
          this.transaksiService = transaksiService;
@@ -58,6 +60,10 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // tombol tambah
         Button tambahButton = new Button("Tambah");
         tambahButton.getStyleClass().add("primary-button");
+
+        // tombol edit 
+        Button editButton = new Button("Edit");
+        // editButton.getStyleClass().add("");
 
         // tombol hapus
         Button hapusButton = new Button("Hapus");
@@ -110,6 +116,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tipeBox,
             tanggalPicker,
             tambahButton,
+            editButton,
             hapusButton
         );
         fromCard.getStyleClass().add("from-card");
@@ -179,7 +186,21 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
             Transaksi transaksi = new Transaksi(keterangan, nominal, tipe, tanggal);
 
-            transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
+            if(transaksiYangDiedit == null){
+                // Mode tamah
+                transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
+            }
+            else{
+                transaksiYangDiedit.setKeterangan(keterangan);
+                transaksiYangDiedit.setNominal(nominal);
+                transaksiYangDiedit.setTipe(tipe);
+                transaksiYangDiedit.setTanggal(tanggal);
+
+                transaksiTable.refresh();
+                transaksiService.updateTransaksi();
+
+                transaksiYangDiedit = null;
+            }
             dashboardView.refreshDashboard(); 
 
             // scroll ui
@@ -237,7 +258,30 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 }
 
             });
+
+            editButton.setOnAction(e -> {
+                Transaksi selected = transaksiTable.getSelectionModel()
+                                    .getSelectedItem();
+
+                 // Validasi
+                if(selected == null){
+                    showWarning("Pilih transaksi terlebih dahulu");
+                    return;
+                }
+                transaksiYangDiedit = selected;
+
+                 // Isi form dengan data transaksi yang dipilih
+               keteranganField.setText(selected.getKeterangan());
+               
+               nominalField.setText(String.valueOf(selected.getNominal()));
+
+               tipeBox.setValue(selected.getTipe());
+
+               tanggalPicker.setValue(LocalDate.parse(selected.getTanggal()));
+
+            });
     }
+    
     private void showWarning(String message) {
 
         Alert alert = new Alert(Alert.AlertType.WARNING);

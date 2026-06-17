@@ -38,6 +38,12 @@ public class TransaksiService {
         CSVHelper.saveToCSV(daftarTransaksi); // Artinya: hapus transaksi -> update ObservableList -> Tulis ulang CSV
     }
 
+    public void updateTransaksi() {
+
+        CSVHelper.saveToCSV(daftarTransaksi);
+
+    }
+
     // Method getTotalPemasukan()
     public double getTotalPemasukan(){
         double  total = 0; // Inisialisasi variabel total untuk menyimpan jumlah total pemasukan.

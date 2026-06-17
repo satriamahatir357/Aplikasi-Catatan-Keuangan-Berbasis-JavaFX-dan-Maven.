@@ -34,4 +34,22 @@ public class Transaksi {
         return tanggal;
     }
     
+    // Setter
+    // Setter digunakan untuk mengubah nilai attribute yang private
+
+    public void setKeterangan(String keterangan){
+        this.keterangan = keterangan;
+    }
+
+    public void setNominal(double nominal){
+        this.nominal = nominal;
+    }
+
+    public void setTipe(String tipe){
+        this.tipe = tipe;
+    }
+
+    public void setTanggal(String tanggal){
+        this.tanggal = tanggal;
+    }
 }
