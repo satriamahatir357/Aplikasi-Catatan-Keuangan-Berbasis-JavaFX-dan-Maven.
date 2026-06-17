@@ -112,6 +112,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         
         transaksiTable.getColumns().addAll(keteranganColumn, nominalColumn, tipeColumn, tanggalColumn); // Menambahkan kolom-kolom ke dalam tabel transaksi
 
+        // Isi lebar tabel secara otomatis
+        transaksiTable.setColumnResizePolicy(
+            TableView.CONSTRAINED_RESIZE_POLICY
+        );
+
         // layout
         setSpacing(10); // setSpacing untuk memberikan jarak antar elemen dalam VBox
 
@@ -142,7 +147,6 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tableTitle,
             formBox
         );
-
         formCard.getStyleClass().add("form-card");
 
         VBox tableCard = new VBox(
