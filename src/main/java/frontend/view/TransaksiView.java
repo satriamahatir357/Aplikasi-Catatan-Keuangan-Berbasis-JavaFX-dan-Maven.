@@ -1,6 +1,8 @@
 package frontend.view;
 
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -9,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -63,7 +66,13 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         // tombol edit 
         Button editButton = new Button("Edit");
-        // editButton.getStyleClass().add("");
+        editButton.getStyleClass().add("edit-button");
+
+        // tombol batal edit
+        Button batalButton = new Button("Batal");
+        batalButton.setVisible(false);
+        batalButton.setManaged(false); // batalButton.setManaged(false) = tombolnya memang hilang, tapi ruang kosongnya masih ada.
+        batalButton.getStyleClass().add("cancel-button");
 
         // tombol hapus
         Button hapusButton = new Button("Hapus");
@@ -109,26 +118,42 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         Label tableTitle = new Label("Daftar Transaksi");
         tableTitle.getStyleClass().add("form-title");
 
-        VBox fromCard = new VBox(
-            title,
+        HBox buttonBox = new HBox(
+            tambahButton,
+            batalButton,
+            editButton,
+            hapusButton
+        );
+
+        buttonBox.setSpacing(15);
+        buttonBox.setPadding(new Insets(10, 0, 0, 0));
+        buttonBox.setAlignment(Pos.CENTER_LEFT);
+
+        VBox formBox = new VBox(
             keteranganField,
             nominalField,
             tipeBox,
             tanggalPicker,
-            tambahButton,
-            editButton,
-            hapusButton
+            buttonBox
         );
-        fromCard.getStyleClass().add("from-card");
+        formBox.setSpacing(15);
+
+        VBox formCard = new VBox(
+            tableTitle,
+            formBox
+        );
+
+        formCard.getStyleClass().add("form-card");
 
         VBox tableCard = new VBox(
             tableTitle,
             transaksiTable
         );
+
         tableCard.getStyleClass().add("table-card");
 
         VBox content = new VBox(
-            fromCard,
+            formCard,
             tableCard
         );
 
@@ -200,6 +225,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 transaksiService.updateTransaksi();
 
                 transaksiYangDiedit = null;
+                tambahButton.setText("Tambah");
+                batalButton.setVisible(false);
             }
             dashboardView.refreshDashboard(); 
 
@@ -259,6 +286,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
             });
 
+            // === tombol edit ===
             editButton.setOnAction(e -> {
                 Transaksi selected = transaksiTable.getSelectionModel()
                                     .getSelectedItem();
@@ -269,6 +297,9 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                     return;
                 }
                 transaksiYangDiedit = selected;
+                tambahButton.setText("Simpan Perubahan");
+                batalButton.setVisible(true);
+                batalButton.setManaged(true);
 
                  // Isi form dengan data transaksi yang dipilih
                keteranganField.setText(selected.getKeterangan());
@@ -279,6 +310,21 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
                tanggalPicker.setValue(LocalDate.parse(selected.getTanggal()));
 
+            });
+
+            // === tombol batal edit ===
+            batalButton.setOnAction(e -> {
+                transaksiYangDiedit = null;
+
+                keteranganField.clear();
+                nominalField.clear();
+                tanggalPicker.setValue(null);
+                tipeBox.setValue("Pemasukan");
+
+                tambahButton.setText("Tambah");
+
+                batalButton.setVisible(false);
+                batalButton.setManaged(false);
             });
     }
     

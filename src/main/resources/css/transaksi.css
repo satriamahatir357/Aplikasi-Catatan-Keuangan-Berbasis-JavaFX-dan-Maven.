@@ -35,6 +35,8 @@
 
 .primary-button{
     -fx-background-color: #2563EB;
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight:bold;
@@ -94,7 +96,7 @@
 }
 
 /* Form Card */
-.from-card{
+.form-card{
     -fx-background-color: white;
     -fx-background-radius: 12;
 
@@ -183,6 +185,8 @@
 .danger-button{
     -fx-background-color: #ef4444;
     -fx-text-fill: white;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 40px;
     -fx-font-weight:bold;
     -fx-background-radius: 8px;
 }
@@ -230,4 +234,42 @@
 
 .secondary-button:pressed{
     -fx-background-color: #94A3B8;
+}
+
+/* === tombol edit === */
+.edit-button{
+    -fx-background-color: #F59E0B;
+    -fx-text-fill: white;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 40px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.edit-button:hover{
+    -fx-background-color: #D97706;
+}
+
+.edit-button:pressed{
+    -fx-background-color: #B45309;
+}
+
+/* Tombol Batal */
+.cancel-button{
+    -fx-background-color: #64748B;
+    -fx-text-fill: white;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 40px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.cancel-button:hover{
+    -fx-background-color: #475569;
+}
+
+.cancel-button:pressed{
+    -fx-background-color: #334155;
 }
