@@ -231,6 +231,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 transaksiYangDiedit = null;
                 tambahButton.setText("Tambah");
                 batalButton.setVisible(false);
+                batalButton.setManaged(false);
             }
             dashboardView.refreshDashboard(); 
 
