@@ -274,3 +274,9 @@
 .cancel-button:pressed{
     -fx-background-color: #334155;
 }
+
+/* search */
+.search-field{
+    -fx-pref-height: 40px;
+    -fx-font-size: 14;
+}

@@ -29,6 +29,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
     private DashboardView dashboardView;
     private Transaksi transaksiYangDiedit = null;
+    private TextField searchField;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
          this.transaksiService = transaksiService;
@@ -37,6 +38,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
+
+        // search
+        searchField = new TextField();
+        searchField.setPromptText("Cari transaksi...");
+        searchField.getStyleClass().add("search-field");
 
         // input keterangan
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
@@ -151,6 +157,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         VBox tableCard = new VBox(
             tableTitle,
+            searchField,
             transaksiTable
         );
 
