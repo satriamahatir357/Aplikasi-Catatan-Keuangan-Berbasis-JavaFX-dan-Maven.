@@ -21,19 +21,23 @@ import javafx.scene.control.Alert; // komponen popup dialog bawaan JavaFX yang d
 import java.time.LocalDate;
 import java.util.Optional;
 
+import backend.SearchService;
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
 
 public class TransaksiView extends VBox { // extends VBox untuk membuat layout vertikal
     
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
+    private SearchService searchService;
     private DashboardView dashboardView;
     private Transaksi transaksiYangDiedit = null;
     private TextField searchField;
+    private TableView<Transaksi> transaksiTable;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
          this.transaksiService = transaksiService;
          this.dashboardView = dashboardView;
+        this.searchService = new SearchService();
 
         // label
         Label title = new Label("Tambah Transaksi");
@@ -44,6 +48,14 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         searchField.setPromptText("Cari berdasarkan keterangan...");
         searchField.getStyleClass().add("search-field");
         searchField.setMaxWidth(Double.MAX_VALUE);
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            transaksiTable.setItems(
+                searchService.search(
+                    transaksiService.getDaftarTransaksi(),
+                    newValue)
+            );
+        });
 
         // input keterangan
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
@@ -86,7 +98,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         hapusButton.getStyleClass().add("danger-button");
 
         // tabel transaksi
-        TableView<Transaksi> transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
+        transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
         transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
         transaksiTable.getStyleClass().add("transaksi-table");
 
