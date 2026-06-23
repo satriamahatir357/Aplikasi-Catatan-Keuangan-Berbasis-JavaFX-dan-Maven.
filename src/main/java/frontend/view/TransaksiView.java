@@ -41,8 +41,9 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         // search
         searchField = new TextField();
-        searchField.setPromptText("Cari transaksi...");
+        searchField.setPromptText("Cari berdasarkan keterangan...");
         searchField.getStyleClass().add("search-field");
+        searchField.setMaxWidth(Double.MAX_VALUE);
 
         // input keterangan
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
