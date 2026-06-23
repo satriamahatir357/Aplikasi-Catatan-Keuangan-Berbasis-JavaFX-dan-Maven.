@@ -17,7 +17,17 @@ public class SearchService {
             return transaksiList;
         }
 
-        keyword = keyword.toLowerCase();
+        keyword = keyword.toLowerCase(); // toLowerCase() = Mengubah huruf menjadi kecil.
+        
+        for(Transaksi transaksi : transaksiList){ // Ambil setiap transaksi satu per satu.
+            // Ambil keterangan transaksi
+            String keterangan = transaksi.getKeterangan().toLowerCase();
+
+            // Cek apakah cocok
+            if(keterangan.contains(keyword)){ // Mengecek apakah sebuah teks mengandung teks lain. "Makan Ayam".contains("mak") maka hasilnya: true
+                hasil.add(transaksi); // Menambahkan data ke list.
+            }
+        }
 
         return hasil;
     }
