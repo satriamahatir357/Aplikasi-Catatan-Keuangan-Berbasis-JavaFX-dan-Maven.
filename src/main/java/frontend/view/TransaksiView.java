@@ -21,6 +21,7 @@ import javafx.scene.control.Alert; // komponen popup dialog bawaan JavaFX yang d
 import java.time.LocalDate;
 import java.util.Optional;
 
+import backend.FilterService;
 import backend.SearchService;
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
@@ -33,11 +34,21 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private Transaksi transaksiYangDiedit = null;
     private TextField searchField;
     private TableView<Transaksi> transaksiTable;
+    private FilterService filterService;
+    private ComboBox<String> filterBox;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
          this.transaksiService = transaksiService;
          this.dashboardView = dashboardView;
         this.searchService = new SearchService();
+        this.filterService = new FilterService();
+
+        // inisialisasi filterBox
+        filterBox = new ComboBox<>();
+
+        filterBox.getItems().addAll("Semua", "Pemasukan", "Pengeluaran");
+        filterBox.setValue("Semua");
+        filterBox.getStyleClass().add("filter-box");
 
         // label
         Label title = new Label("Tambah Transaksi");
@@ -168,9 +179,17 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         );
         formCard.getStyleClass().add("form-card");
 
+        // Buat container Search + Filter
+        HBox searchFilterBox = new HBox(
+            searchField,
+            filterBox
+        );
+        searchFilterBox.setSpacing(10);
+        searchFilterBox.setAlignment(Pos.CENTER_LEFT);
+
         VBox tableCard = new VBox(
             tableTitle,
-            searchField,
+            searchFilterBox,
             transaksiTable
         );
 
