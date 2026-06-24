@@ -1,6 +1,7 @@
 package frontend.view;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -36,6 +37,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private TableView<Transaksi> transaksiTable;
     private FilterService filterService;
     private ComboBox<String> filterBox;
+    private String keyword = "";
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
          this.transaksiService = transaksiService;
@@ -45,6 +47,10 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         // inisialisasi filterBox
         filterBox = new ComboBox<>();
+
+        filterBox.valueProperty().addListener((observable, oldValue, newValue)-> {
+        updateTable();
+        });
 
         filterBox.getItems().addAll("Semua", "Pemasukan", "Pengeluaran");
         filterBox.setValue("Semua");
@@ -61,11 +67,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         searchField.setMaxWidth(Double.MAX_VALUE);
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            transaksiTable.setItems(
-                searchService.search(
-                    transaksiService.getDaftarTransaksi(),
-                    newValue)
-            );
+            keyword = newValue;
+            updateTable();
         });
 
         // input keterangan
@@ -388,5 +391,20 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         alert.showAndWait();
     }
+
+    private void updateTable(){
+            ObservableList<Transaksi> hasil =
+                searchService.search(
+                    transaksiService.getDaftarTransaksi(),
+                    keyword
+                );
+            
+            hasil = filterService.filter(
+                            hasil,
+                            filterBox.getValue()
+                    );
+            transaksiTable.setItems(hasil);
+
+        }
     
 }
