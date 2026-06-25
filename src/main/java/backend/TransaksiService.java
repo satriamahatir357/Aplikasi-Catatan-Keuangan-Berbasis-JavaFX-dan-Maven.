@@ -44,32 +44,4 @@ public class TransaksiService {
 
     }
 
-    // Method getTotalPemasukan()
-    public double getTotalPemasukan(){
-        double  total = 0; // Inisialisasi variabel total untuk menyimpan jumlah total pemasukan.
-
-        for(Transaksi transaksi : daftarTransaksi){  // Melakukan iterasi (perulangan) untuk setiap transaksi dalam daftarTransaksi
-            if(transaksi.getTipe().equals("Pemasukan")){ // Memeriksa apakah tipe transaksi adalah "Pemasukkan" dengan menggunakan metode get
-                total += transaksi.getNominal(); // Jika tipe transaksi adalah "Pemasukkan", maka nominal transaksi ditambahkan ke variabel total menggunakan operator +=.
-            }
-        }
-        return total; // Mengembalikan jumlah total pemasukan yang telah dihitung.
-    }
-
-    // Method getTotalPengeluaran()
-    public double getTotalPengeluaran(){
-        double total = 0; // Inisialisasi variabel total untuk menyimpan jumlah total pengeluaran.
-
-        for(Transaksi transaksi : daftarTransaksi){ // Melakukan iterasi (perulangan) untuk setiap transaksi dalam daftarTransaksi
-            if(transaksi.getTipe().equals("Pengeluaran")){ // Memeriksa apakah tipe transaksi adalah "Pengeluaran" dengan menggunakan metode getTipe() dari objek transaksi.
-                total += transaksi.getNominal(); // Jika tipe transaksi adalah "Pengeluaran", maka nominal transaksi ditambahkan ke variabel total menggunakan operator +=.
-            }
-        }
-        return total; // Mengembalikan jumlah total pengeluaran yang telah dihitung.
-    }
-
-    // Method getSaldo()
-    public double getSaldo(){
-        return getTotalPemasukan() - getTotalPengeluaran(); // Menghitung saldo dengan mengurangi total pengeluaran dari total pemasukan menggunakan metode getTotalPemasukan() dan getTotalPengeluaran().
-    }
 }

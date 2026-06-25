@@ -1,5 +1,6 @@
 package frontend.view;
 
+import backend.DashboardService;
 import backend.TransaksiService;
 import javafx.geometry.Pos; // Pos adalah sebuah kelas dalam JavaFX yang digunakan untuk menentukan posisi elemen dalam layout.
 import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Label biasanya digunakan untuk memberikan informasi atau deskripsi kepada pengguna.
@@ -16,9 +17,11 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         private Label pengeluaranValue;
         private Label saldoValue;
         private TransaksiService transaksiService;
+        private final DashboardService dashboardService;
 
     public DashboardView(TransaksiService transaksiService) {
         this.transaksiService = transaksiService;
+        this.dashboardService = new DashboardService(transaksiService); // DashboardService memakai TransaksiService sebagai sumber data.
         
         // Card Pemasukan
         Label pemasukanTitle = new Label("Total Pemasukan");
@@ -99,8 +102,8 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
     // Method refreshDashboard
     public void refreshDashboard(){
-        double pemasukan = transaksiService.getTotalPemasukan();
-        double pengeluaran = transaksiService.getTotalPengeluaran();
+        double pemasukan = dashboardService.getTotalPemasukan();
+        double pengeluaran = dashboardService.getTotalPengeluaran();
 
         updateDashboard(pemasukan, pengeluaran);
     }
