@@ -18,6 +18,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         private Label saldoValue;
         private TransaksiService transaksiService;
         private final DashboardService dashboardService;
+        private Label jumlahTransaksiValue;
 
     public DashboardView(TransaksiService transaksiService) {
         this.transaksiService = transaksiService;
@@ -64,12 +65,29 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         );
         saldoCard.getStyleClass().add("dashboard-card");
         saldoCard.getStyleClass().add("balance-card");
+
+        // Card jumlah transaksi
+        Label jumlahTitle = new Label("Jumlah Transaksi");
+        jumlahTitle.getStyleClass().add("card-title");
+
+        jumlahTransaksiValue = new Label("0");
+        jumlahTransaksiValue.getStyleClass().add("card-value");
+
+        VBox jumlahCard = new VBox(
+            jumlahTitle,
+            jumlahTransaksiValue
+        );
+
+        jumlahCard.getStyleClass().add("dashboard-card");
+        jumlahCard.getStyleClass().add("transaction-card");
+
         
         // Container untuk semua card
         HBox cardContainer = new HBox(
                 pemasukanCard,
                 pengeluaranCard,
-                saldoCard
+                saldoCard,
+                jumlahCard
         );
         
         // Styling Layout
@@ -106,5 +124,9 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         double pengeluaran = dashboardService.getTotalPengeluaran();
 
         updateDashboard(pemasukan, pengeluaran);
+        
+        jumlahTransaksiValue.setText(
+            dashboardService.getJumlahTransaksi() + " Transaksi"
+        );
     }
 }

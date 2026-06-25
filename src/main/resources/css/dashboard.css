@@ -53,3 +53,8 @@
     -fx-border-color: #3B82F6;
     -fx-border-width: 2;
 }
+
+.transaction-card {
+    -fx-border-color: #8B5CF6;
+    -fx-border-width: 2;
+}

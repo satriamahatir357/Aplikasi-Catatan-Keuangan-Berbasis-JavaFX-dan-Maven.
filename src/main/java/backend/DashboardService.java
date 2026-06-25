@@ -37,4 +37,7 @@ public class DashboardService {
         return getTotalPemasukan() - getTotalPengeluaran(); // Menghitung saldo dengan mengurangi total pengeluaran dari total pemasukan menggunakan metode getTotalPemasukan() dan getTotalPengeluaran().
     }
 
+    public int getJumlahTransaksi(){
+        return transaksiService.getDaftarTransaksi().size(); // Kenapa cukup size()? Karena getDaftarTransaksi() mengembalikan ObservableList<Transaksi>, dan size() langsung memberi jumlah item di dalam list.
+    }
     }
