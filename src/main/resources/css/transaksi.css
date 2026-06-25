@@ -282,9 +282,22 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-padding: 0 12 0 12;
-    -fx-pref-width: 350;
+    -fx-pref-width: 420;
 }
 
 .filter-box{
     -fx-pref-width: 170px;
+    -fx-pref-heigth: 40;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-size: 14;
+}
+
+/* == sortbox == */
+.sort-box{
+    -fx-pref-width: 190;
+    -fx-pref-heigth: 40;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-size: 14;
 }

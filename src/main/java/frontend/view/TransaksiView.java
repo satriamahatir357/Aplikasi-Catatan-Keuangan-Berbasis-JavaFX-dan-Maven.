@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import backend.FilterService;
 import backend.SearchService;
+import backend.SortService;
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
 
@@ -38,16 +39,20 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private FilterService filterService;
     private ComboBox<String> filterBox;
     private String keyword = "";
+    private ComboBox<String> sortBox;
+    private SortService sortService;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
          this.transaksiService = transaksiService;
          this.dashboardView = dashboardView;
         this.searchService = new SearchService();
         this.filterService = new FilterService();
+        this.sortService = new SortService();
 
         // inisialisasi filterBox
         filterBox = new ComboBox<>();
 
+        // Setiap kali pengguna mengganti pilihan pada filterBox, panggil updateTable() agar isi tabel diperbarui sesuai filter yang dipilih.
         filterBox.valueProperty().addListener((observable, oldValue, newValue)-> {
         updateTable();
         });
@@ -56,13 +61,34 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         filterBox.setValue("Semua");
         filterBox.getStyleClass().add("filter-box");
 
+        // Buat sortBox
+        sortBox = new ComboBox<>();
+
+        sortBox.getItems().addAll(
+            "Terbaru",
+            "Terlama",
+            "Nominal Terbesar",
+            "Nominal Terkecil",
+            "A-Z",
+            "Z-A"
+        );
+        sortBox.setValue("Terbaru");
+        sortBox.getStyleClass().add("sort-box");
+
+        // Setiap kali pilihan pada sortBox berubah, panggil updateTable() agar tabel diperbarui sesuai pilihan terbaru
+        sortBox.valueProperty() // Ambil property nilai yang sedang dipilih pada sortBox.
+                .addListener( // Tambahkan "pendengar" (listener).
+                    (observable, oldValue, newValue)-> { // Ini adalah lambda expression. Artinya: Saat nilai berubah, Java memberikan tiga informasi:
+            updateTable(); // Muat ulang isi tabel sesuai pilihan terbaru.
+        });
+
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
 
         // search
         searchField = new TextField();
-        searchField.setPromptText("Cari berdasarkan keterangan...");
+        searchField.setPromptText("Cari transaksi...");
         searchField.getStyleClass().add("search-field");
         searchField.setMaxWidth(Double.MAX_VALUE);
 
@@ -185,7 +211,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // Buat container Search + Filter
         HBox searchFilterBox = new HBox(
             searchField,
-            filterBox
+            filterBox,
+            sortBox
         );
         searchFilterBox.setSpacing(10);
         searchFilterBox.setAlignment(Pos.CENTER_LEFT);
@@ -202,6 +229,9 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             formCard,
             tableCard
         );
+
+        getChildren().add(content);
+        updateTable();
 
         // scroll ui
         content.getStyleClass().add("transaksi-view");
@@ -403,6 +433,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                             hasil,
                             filterBox.getValue()
                     );
+            
+            hasil = sortService.sort(
+                            hasil,
+                            sortBox.getValue()
+            );
             transaksiTable.setItems(hasil);
 
         }
