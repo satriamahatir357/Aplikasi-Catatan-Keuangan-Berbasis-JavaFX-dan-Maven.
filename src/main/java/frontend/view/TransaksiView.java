@@ -298,6 +298,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 transaksiYangDiedit.setTanggal(tanggal);
 
                 transaksiTable.refresh();
+
                 transaksiService.updateTransaksi();
 
                 transaksiYangDiedit = null;
@@ -305,6 +306,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 batalButton.setVisible(false);
                 batalButton.setManaged(false);
             }
+            updateTable(); 
             dashboardView.refreshDashboard(); 
 
             // scroll ui
@@ -313,6 +315,47 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tanggalPicker.setValue(null);
             tipeBox.setValue("Pemasukan");
         
+        });
+
+        // === tombol edit ===
+        editButton.setOnAction(e -> {
+            Transaksi selected = transaksiTable.getSelectionModel()
+                                .getSelectedItem();
+
+             // Validasi
+            if(selected == null){
+                    showWarning("Pilih transaksi terlebih dahulu");
+                    return;
+            }
+            transaksiYangDiedit = selected;
+            tambahButton.setText("Simpan Perubahan");
+            batalButton.setVisible(true);
+            batalButton.setManaged(true);
+
+            // Isi form dengan data transaksi yang dipilih
+            keteranganField.setText(selected.getKeterangan());
+               
+            nominalField.setText(String.valueOf(selected.getNominal()));
+
+            tipeBox.setValue(selected.getTipe());
+
+            tanggalPicker.setValue(LocalDate.parse(selected.getTanggal()));
+
+        });
+
+        // === tombol batal edit ===
+        batalButton.setOnAction(e -> {
+            transaksiYangDiedit = null;
+
+            keteranganField.clear();
+            nominalField.clear();
+            tanggalPicker.setValue(null);
+            tipeBox.setValue("Pemasukan");
+
+            tambahButton.setText("Tambah");
+            
+            batalButton.setVisible(false);
+            batalButton.setManaged(false);
         });
 
         // === Hapus Button ===
@@ -358,6 +401,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             if (result.isPresent() && 
                 result.get() == ButtonType.OK) { // Kalau user memilih sesuatu DAN pilihannya adalah OK maka jalankan proses hapus.
                     transaksiService.hapusTransaksi(selected); // memanggil method hapusTransaksi dari transaksiService
+                    updateTable();        
                     dashboardView.refreshDashboard(); // memanggi method dari dashboardView
                 }
 

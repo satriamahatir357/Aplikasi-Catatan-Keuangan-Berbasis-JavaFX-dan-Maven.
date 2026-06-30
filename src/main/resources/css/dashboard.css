@@ -23,6 +23,26 @@
     );
 }
 
+.dashboard-card-row2 {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 12;
+
+    -fx-padding: 20;
+
+    -fx-min-width: 350;
+    -fx-min-height: 120;
+
+    /* shadowmvn jav */
+    -fx-effect: dropshadow( 
+        gaussian,
+        rgba(0,0,0,0.08),
+        10, 0, 0, 2
+    );
+}
+
 .card-title{
     -fx-font-size: 14px;
     -fx-text-fill: #64748D;
@@ -34,11 +54,13 @@
     -fx-text-fill: #1E293B;
 }
 
+/* card */
 .card-container{
-    -fx-spacing: 25;
+    -fx-spacing: 20;
     -fx-alignment: center;
 }
 
+/* border card */
 .income-card {
     -fx-border-color: #22C55E;
     -fx-border-width: 2;
@@ -56,5 +78,10 @@
 
 .transaction-card {
     -fx-border-color: #8B5CF6;
+    -fx-border-width: 2;
+}
+
+.avenger-card{
+    -fx-border-color: #F59E0B;
     -fx-border-width: 2;
 }

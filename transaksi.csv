@@ -1,8 +1,6 @@
 keterangan,nominal,tipe,tanggal
-nabung,14000.0,Pemasukan,2026-06-14
-rokok,18000.0,Pengeluaran,2026-06-14
-makan malam,12000.0,Pengeluaran,2026-06-15
-tf bapak,200.0,Pemasukan,2026-06-17
-nabung,20000.0,Pemasukan,2026-06-21
-makan siang,25000.0,Pengeluaran,2026-06-25
-makan pagi,12000.0,Pengeluaran,2026-06-25
+tf,1000000.0,Pemasukan,2026-06-01
+medok,200000.0,Pengeluaran,2026-06-03
+kondom,100000.0,Pengeluaran,2026-06-04
+nabung,50000.0,Pemasukan,2026-06-29
+Arak,50000.0,Pengeluaran,2026-06-29

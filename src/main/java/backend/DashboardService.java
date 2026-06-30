@@ -40,4 +40,20 @@ public class DashboardService {
     public int getJumlahTransaksi(){
         return transaksiService.getDaftarTransaksi().size(); // Kenapa cukup size()? Karena getDaftarTransaksi() mengembalikan ObservableList<Transaksi>, dan size() langsung memberi jumlah item di dalam list.
     }
+
+    public double getRataRataNominal(){
+        if(transaksiService.getDaftarTransaksi().isEmpty()){
+            return 0;
+        }
+
+        double total = 0;
+
+        // Untuk setiap transaksi yang ada di daftar transaksi, ambil nilai nominalnya lalu tambahkan ke variabel total.
+        for(Transaksi transaksi : transaksiService.getDaftarTransaksi()){ // transaksiService.getDaftarTransaksi() Artinya: Ambil daftar semua transaksi dari transaksiService
+            total += transaksi.getNominal();
+        }
+
+        return total / transaksiService.getDaftarTransaksi().size();
+        
     }
+}

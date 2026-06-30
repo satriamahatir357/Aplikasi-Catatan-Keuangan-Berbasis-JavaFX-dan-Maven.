@@ -29,7 +29,7 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
 
         Button dashboardButton = new Button("Dashboard");
         dashboardButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
-        dashboardButton.getStyleClass().add("sidebar-button-active"); 
+        dashboardButton.getStyleClass().remove("sidebar-button-active"); 
         
         Button transaksiButton = new Button("Transaksi");
         transaksiButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button

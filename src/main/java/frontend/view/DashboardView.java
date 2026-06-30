@@ -19,6 +19,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         private TransaksiService transaksiService;
         private final DashboardService dashboardService;
         private Label jumlahTransaksiValue;
+        private Label rataRataValue;
 
     public DashboardView(TransaksiService transaksiService) {
         this.transaksiService = transaksiService;
@@ -78,32 +79,59 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             jumlahTransaksiValue
         );
 
-        jumlahCard.getStyleClass().add("dashboard-card");
+        jumlahCard.getStyleClass().add("dashboard-card-row2");
         jumlahCard.getStyleClass().add("transaction-card");
 
+        // Card Rata-rata nominal
+        Label rataTitle = new Label("Rata-rata Nominal");
+        rataTitle.getStyleClass().add("card-title");
+
+        rataRataValue = new Label("Rp 0");
+        rataRataValue.getStyleClass().add("card-value");
+
+        VBox rataCard = new VBox(
+            rataTitle,
+            rataRataValue
+        );
+
+        rataCard.getStyleClass().add("dashboard-card-row2");
+        rataCard.getStyleClass().add("avenger-card");
         
         // Container untuk semua card
-        HBox cardContainer = new HBox(
+        HBox row1 = new HBox(
                 pemasukanCard,
                 pengeluaranCard,
-                saldoCard,
-                jumlahCard
+                saldoCard
         );
+        row1.getStyleClass().add("card-container");
+        
+        HBox row2 = new HBox(
+            jumlahCard,
+            rataCard
+        );
+        row2.getStyleClass().add("card-container");
+
+        // menyatukkan row card dalam satu VBox
+        VBox dashboardCards = new VBox(
+            row1,
+            row2
+        );
+        dashboardCards.setSpacing(25);
         
         // Styling Layout
         getStyleClass().add("dashboard-view");
         
-        cardContainer.getStyleClass().add("card-container");
+        dashboardCards.getStyleClass().add("card-container");
         
         // Masukkan card ke DashboardView
-        getChildren().add(cardContainer);
+        getChildren().add(dashboardCards);
 
         // memanggil method refreshDashboard
         refreshDashboard();
     }
 
     // construktor
-    public void updateDashboard(double pemasukan, double pengeluaran){
+    public void updateDashboard(double pemasukan, double pengeluaran, double rataRata){
             double saldo = pemasukan - pengeluaran;
 
              // Formatter mata uang Rupiah Indonesia
@@ -116,14 +144,16 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             pemasukanValue.setText(rupiah.format(pemasukan));
             pengeluaranValue.setText(rupiah.format(pengeluaran));
             saldoValue.setText(rupiah.format(saldo));
+            rataRataValue.setText(rupiah.format(rataRata));
         }
 
     // Method refreshDashboard
     public void refreshDashboard(){
         double pemasukan = dashboardService.getTotalPemasukan();
         double pengeluaran = dashboardService.getTotalPengeluaran();
+        double rataRata = dashboardService.getRataRataNominal();
 
-        updateDashboard(pemasukan, pengeluaran);
+        updateDashboard(pemasukan, pengeluaran, rataRata);
         
         jumlahTransaksiValue.setText(
             dashboardService.getJumlahTransaksi() + " Transaksi"
