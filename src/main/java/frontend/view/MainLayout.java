@@ -29,11 +29,10 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
 
         Button dashboardButton = new Button("Dashboard");
         dashboardButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
-        dashboardButton.getStyleClass().remove("sidebar-button-active"); 
+        dashboardButton.getStyleClass().add("sidebar-button-active");
         
         Button transaksiButton = new Button("Transaksi");
         transaksiButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
-        transaksiButton.getStyleClass().remove("sidebar-button-active"); 
 
         VBox sidebar = new VBox( // Membuat sebuah objek VBox yang akan digunakan sebagai sidebar dalam aplikasi. VBox adalah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. Dengan membuat objek VBox, kita dapat menambahkan tombol-tombol navigasi seperti dashboardButton dan transaksiButton ke dalamnya, sehingga akan ditampilkan secara vertikal di sisi kiri aplikasi.
                 dashboardButton,
@@ -56,16 +55,16 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
         contentArea.getChildren().add(dashboardView); // Menambahkan dashboardView ke dalam contentArea, sehingga ketika aplikasi dijalankan, tampilan DashboardView akan ditampilkan sebagai tampilan utama di area konten.
         
         dashboardButton.setOnAction(e ->{
-            dashboardButton.getStyleClass().add("sidebar-button-active");
             transaksiButton.getStyleClass().remove("sidebar-button-active");
+            dashboardButton.getStyleClass().add("sidebar-button-active");
             
             contentArea.getChildren().clear();
             contentArea.getChildren().add(dashboardView);
         });
 
         transaksiButton.setOnAction(e ->{
-            transaksiButton.getStyleClass().add("sidebar-button-active");
             dashboardButton.getStyleClass().remove("sidebar-button-active");
+            transaksiButton.getStyleClass().add("sidebar-button-active");
 
             contentArea.getChildren().clear(); // Menghapus semua elemen yang ada di dalam contentArea menggunakan metode getChildren().clear(), sehingga ketika tombol transaksiButton diklik, tampilan sebelumnya (seperti DashboardView) akan dihapus dari area konten sebelum menampilkan TransaksiView.
             contentArea.getChildren().add(transaksiView); // Menambahkan transaksiView ke dalam contentArea, sehingga ketika tombol transaksiButton diklik, tampilan TransaksiView akan ditampilkan di area konten.

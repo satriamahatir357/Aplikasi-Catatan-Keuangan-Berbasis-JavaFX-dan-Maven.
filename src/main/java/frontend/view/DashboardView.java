@@ -8,6 +8,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Label biasanya digunakan untuk memberikan informasi atau deskripsi kepada pengguna.
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox; // HBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara horizontal. HBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari kiri ke kanan.
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
 
@@ -136,7 +137,20 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         NumberAxis yAxis = new NumberAxis(); // Membuat sumbu Y (vertikal) yang berisi angka.
 
         chart = new BarChart<>(xAxis, yAxis); // Buat sebuah diagram batang menggunakan: xAxis sebagai sumbu horizontal, yAxis sebagai sumbu vertikal
+        chart.setCategoryGap(40);
+        chart.setBarGap(5);
+        
+        // Menghilangkan garis pada barChart
+        chart.setHorizontalGridLinesVisible(false); // Sembunyikan garis horizontal pada grafik.
+        chart.setVerticalGridLinesVisible(false); // Sembunyikan garis vertikal pada grafik.
+
         chart.setTitle("Grafik Keuangan");
+        chart.getStyleClass().add("chart-title");
+        xAxis.setLabel("Kategori");
+        yAxis.setLabel("Nominal (Rp)");
+
+        chart.getStyleClass().add("chart");
+        
         chart.setLegendVisible(false);
         chart.setAnimated(false);
         chart.setPrefHeight(300);
@@ -149,6 +163,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
         content.setSpacing(10);
         
+        
         // Masukkan card ke DashboardView
         getChildren().add(content);
 
@@ -160,7 +175,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
     public void updateDashboard(double pemasukan, double pengeluaran, double rataRata){
             double saldo = pemasukan - pengeluaran;
 
-             // Formatter mata uang Rupiah Indonesia
+            // Formatter mata uang Rupiah Indonesia
             NumberFormat rupiah =
                 NumberFormat.getCurrencyInstance( // getCurrencyInstance() adalah method dari class NumberFormat yang digunakan untuk membuat formatter mata uang.
                 new Locale("id", "ID")
@@ -172,6 +187,16 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             saldoValue.setText(rupiah.format(saldo));
             rataRataValue.setText(rupiah.format(rataRata));
         }
+
+    private String formatRupiah(double nominal){
+
+        NumberFormat rupiah =
+            NumberFormat.getCurrencyInstance(
+                new Locale("id", "ID")
+            );
+
+            return rupiah.format(nominal);
+    }
 
     // Method refreshDashboard
     public void refreshDashboard(){
@@ -190,23 +215,68 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
     public void updateChart() {
         chart.getData().clear();
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-
-        series.getData().add(
-            new XYChart.Data<>("Pemasukan",
-                dashboardService.getTotalPemasukan())
+        // Series Pemasukan
+        XYChart.Series<String, Number> pemasukanSeries = new XYChart.Series<>();
+        pemasukanSeries.getData().add(
+            new XYChart.Data<>(
+                "Pemasukan",
+                dashboardService.getTotalPemasukan()
+            )
         );
 
-        series.getData().add(
-            new XYChart.Data("Pengeluaran",
-                dashboardService.getTotalPengeluaran())
+        // Series Pengeluaran
+        XYChart.Series<String, Number> pengeluaranSeries = new XYChart.Series<>();
+        pengeluaranSeries.getData().add(
+            new XYChart.Data<>(
+                "Pengeluaran",
+                dashboardService.getTotalPengeluaran()
+            )
         );
 
-        series.getData().add(
-            new XYChart.Data<>("Saldo",
-                dashboardService.getSaldo())
+        // Series Saldo
+        XYChart.Series<String, Number> saldoSeries = new XYChart.Series<>();
+        saldoSeries.getData().add(
+            new XYChart.Data<>(
+                "Saldo",
+                dashboardService.getSaldo()
+            )
         );
 
-        chart.getData().add(series);
+        // Tooltip pada setiap batang
+        Tooltip pemasukanTooltip = new Tooltip(
+            "Pemasukan\n" + formatRupiah(dashboardService.getTotalPemasukan())
+        );
+        
+        Tooltip pengeluaranTooltip = new Tooltip(
+            "Pengeluaran\n" + formatRupiah(dashboardService.getTotalPengeluaran())
+        );
+        
+        Tooltip saldoTooltip = new Tooltip(
+            "Saldo\n" + formatRupiah(dashboardService.getSaldo())
+        );
+        
+        chart.getData().addAll(
+            pemasukanSeries,
+            pengeluaranSeries,
+            saldoSeries
+        );
+
+        pemasukanSeries.getData().get(0).nodeProperty().addListener((obs, oldNode, newNode) -> {
+            if (newNode != null) {
+                Tooltip.install(newNode, pemasukanTooltip);
+            }
+        });
+
+        pengeluaranSeries.getData().get(0).nodeProperty().addListener((obs, oldNode, newNode) -> {
+            if (newNode != null) {
+                Tooltip.install(newNode, pengeluaranTooltip);
+            }
+        });
+
+        saldoSeries.getData().get(0).nodeProperty().addListener((obs, oldNode, newNode) -> {
+            if (newNode != null) {
+                Tooltip.install(newNode, saldoTooltip);
+            }
+        });
     }
 }

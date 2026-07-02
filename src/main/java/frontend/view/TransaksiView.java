@@ -51,19 +51,13 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         // inisialisasi filterBox
         filterBox = new ComboBox<>();
-
-        // Setiap kali pengguna mengganti pilihan pada filterBox, panggil updateTable() agar isi tabel diperbarui sesuai filter yang dipilih.
-        filterBox.valueProperty().addListener((observable, oldValue, newValue)-> {
-        updateTable();
-        });
-
         filterBox.getItems().addAll("Semua", "Pemasukan", "Pengeluaran");
         filterBox.setValue("Semua");
         filterBox.getStyleClass().add("filter-box");
-
+        
         // Buat sortBox
         sortBox = new ComboBox<>();
-
+        
         sortBox.getItems().addAll(
             "Terbaru",
             "Terlama",
@@ -74,6 +68,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         );
         sortBox.setValue("Terbaru");
         sortBox.getStyleClass().add("sort-box");
+        
+        // Setiap kali pengguna mengganti pilihan pada filterBox, panggil updateTable() agar isi tabel diperbarui sesuai filter yang dipilih.
+        filterBox.valueProperty().addListener((observable, oldValue, newValue)-> {
+        updateTable();
+        });
 
         // Setiap kali pilihan pada sortBox berubah, panggil updateTable() agar tabel diperbarui sesuai pilihan terbaru
         sortBox.valueProperty() // Ambil property nilai yang sedang dipilih pada sortBox.
