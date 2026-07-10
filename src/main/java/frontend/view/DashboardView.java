@@ -10,6 +10,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Label biasanya digunakan untuk memberikan informasi atau deskripsi kepada pengguna.
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox; // HBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara horizontal. HBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari kiri ke kanan.
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
 
 import java.text.NumberFormat;
@@ -17,6 +19,9 @@ import java.util.Locale;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import java.util.Set;
+
+import javafx.scene.text.Text;
+import javafx.geometry.Bounds;
 
 public class DashboardView extends VBox { // DashboardView adalah sebuah kelas yang merupakan turunan dari VBox, yang digunakan untuk membuat tampilan dashboard dalam aplikasi. DashboardView akan menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
 
@@ -31,6 +36,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         private Label rataRataValue;
 
         private BarChart<String, Number> chart;
+        private Pane labelPane; // menaruh objek Text di atas chart
 
     public DashboardView(TransaksiService transaksiService) {
         this.transaksiService = transaksiService;
@@ -158,14 +164,21 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         chart.setAnimated(false);
         chart.setPrefHeight(300);
 
-        // Masukkan chart ke layout
+        labelPane = new Pane(); // labelPane digunakan untuk menaruh objek Text di atas chart
+        labelPane.setMouseTransparent(true); // Agar labelPane tidak mengganggu interaksi pengguna dengan chart, labelPane diatur agar tidak menerima input mouse.
+        
+
+        StackPane chartContainer = new StackPane(
+            chart,
+            labelPane
+        );
+
         VBox content = new VBox(
             dashboardCards,
-            chart
+            chartContainer
         );
 
         content.setSpacing(10);
-        
         
         // Masukkan card ke DashboardView
         getChildren().add(content);
@@ -217,7 +230,8 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
     }
 
     public void updateChart() {
-        chart.getData().clear();
+        chart.getData().clear(); // Menghapus semua data yang ada di chart agar tidak menumpuk saat chart diperbarui.
+        labelPane.getChildren().clear(); // Menghapus semua label yang ada di labelPane agar tidak menumpuk saat chart diperbarui.
         // Series Pemasukan
         XYChart.Series<String, Number> pemasukanSeries = new XYChart.Series<>();
         pemasukanSeries.getData().add(
@@ -264,27 +278,46 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             saldoSeries
         );
 
-        Platform.runLater(() -> { // Gunakan Platform.runLater() untuk memastikan bahwa kode di dalamnya dijalankan pada thread JavaFX Application Thread, yang diperlukan untuk memodifikasi elemen UI.
-            Set<Node> bars = chart.lookupAll(".chart-bar"); // Mengambil semua batang pada chart menggunakan lookupAll() dengan selector CSS ".chart-bar"
-            int index = 0;
+        Platform.runLater(() -> {
+            pasangEfek(
+                pemasukanSeries.getData().get(0),
+                pemasukanTooltip
+            );
 
-            for (Node bar : bars) { // Loop melalui setiap batang pada chart
-                switch (index){ // Gunakan switch-case untuk menentukan warna batang berdasarkan indeksnya
-                    case 0:
-                        bar.setStyle("-fx-bar-fall-color: #22c55e;"); // Warna hijau untuk pemasukan
-                        break;
+            pasangEfek(
+                pengeluaranSeries.getData().get(0),
+                pengeluaranTooltip
+            );
 
-                    case 1:
-                        bar.setStyle("-fx-bar-fall-color: #ef4444;"); // Warna merah untuk pengeluaran
-                        break;
+            pasangEfek(
+                saldoSeries.getData().get(0),
+                saldoTooltip
+            );
+        });
 
-                    case 2:
-                        bar.setStyle("-fx-bar-fall-color: #3b82f6;"); // Warna biru untuk saldo
-                        break;
-                }
+    }
 
-                index++;
-            }
+    private void pasangEfek(
+        XYChart.Data<String, Number> data,
+        Tooltip tooltip) {
+
+        Node bar = data.getNode();
+
+        if (bar == null) {
+            return;
+        }
+
+        Tooltip.install(bar, tooltip);
+
+        bar.setOnMouseEntered(e -> {
+            bar.setScaleX(1.1);
+            bar.setScaleY(1.05);
+        });
+
+        bar.setOnMouseExited(e -> {
+            bar.setScaleX(1);
+            bar.setScaleY(1);
         });
     }
+
 }
