@@ -7,6 +7,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Label biasanya digunakan untuk memberikan informasi atau deskripsi kepada pengguna.
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox; // HBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara horizontal. HBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari kiri ke kanan.
@@ -22,6 +23,8 @@ import java.util.Set;
 
 import javafx.scene.text.Text;
 import javafx.geometry.Bounds;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
 
 public class DashboardView extends VBox { // DashboardView adalah sebuah kelas yang merupakan turunan dari VBox, yang digunakan untuk membuat tampilan dashboard dalam aplikasi. DashboardView akan menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
 
@@ -38,6 +41,8 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         private BarChart<String, Number> chart;
         private Pane labelPane; // menaruh objek Text di atas chart
 
+        private ComboBox<String> filterBox; // ComboBox untuk memilih filter data pada dashboard, misalnya filter berdasarkan bulan atau tahun.
+        
     public DashboardView(TransaksiService transaksiService) {
         this.transaksiService = transaksiService;
         this.dashboardService = new DashboardService(transaksiService); // DashboardService memakai TransaksiService sebagai sumber data.
@@ -173,7 +178,36 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             labelPane
         );
 
+        // == Filter berdasarkan periode ==
+        filterBox = new ComboBox<>();
+        
+        filterBox.getItems().addAll(
+            "Semua",
+            "Hari ini",
+            "7 Hari",
+            "30 Hari",
+            "Bulan ini",
+            "Tahun ini"
+        );
+
+        filterBox.setValue("Semua"); // Set default value dari ComboBox menjadi "Semua"
+        filterBox.setPrefWidth(140); // Set lebar ComboBox menjadi 140 piksel
+
+        Label title = new Label("Dashboard");
+
+        Region spacer = new Region(); // Membuat sebuah Region kosong yang akan digunakan sebagai spacer untuk memisahkan elemen-elemen dalam HBox.
+        HBox.setHgrow(spacer, Priority.ALWAYS); // Mengatur agar spacer dapat mengisi ruang kosong yang tersedia dalam HBox, sehingga elemen-elemen lain akan terdorong ke sisi kiri dan kanan.
+
+        HBox header = new HBox(
+            title,
+            spacer,
+            filterBox
+        );
+
+        header.setAlignment(Pos.CENTER_LEFT); // Mengatur agar semua elemen dalam HBox header sejajar ke kiri secara vertikal.
+
         VBox content = new VBox(
+            header,
             dashboardCards,
             chartContainer
         );
@@ -182,6 +216,8 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         
         // Masukkan card ke DashboardView
         getChildren().add(content);
+
+
 
         // memanggil method refreshDashboard
         refreshDashboard();
@@ -233,11 +269,11 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         chart.getData().clear(); // Menghapus semua data yang ada di chart agar tidak menumpuk saat chart diperbarui.
         labelPane.getChildren().clear(); // Menghapus semua label yang ada di labelPane agar tidak menumpuk saat chart diperbarui.
         // Series Pemasukan
-        XYChart.Series<String, Number> pemasukanSeries = new XYChart.Series<>();
-        pemasukanSeries.getData().add(
-            new XYChart.Data<>(
+        XYChart.Series<String, Number> pemasukanSeries = new XYChart.Series<>(); // Membuat sebuah series baru untuk data pemasukan. Series ini akan berisi pasangan kategori (String) dan nilai (Number) yang akan ditampilkan pada chart.
+        pemasukanSeries.getData().add( // Menambahkan data pemasukan ke dalam series. Data ini terdiri dari kategori "Pemasukan" dan nilai total pemasukan yang diperoleh dari dashboardService.
+            new XYChart.Data<>( // Membuat sebuah objek Data baru yang berisi kategori dan nilai. Objek ini akan ditambahkan ke dalam series pemasukanSeries.
                 "Pemasukan",
-                dashboardService.getTotalPemasukan()
+                dashboardService.getTotalPemasukan() 
             )
         );
 
@@ -260,8 +296,8 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         );
 
         // Tooltip pada setiap batang
-        Tooltip pemasukanTooltip = new Tooltip(
-            "Pemasukan\n" + formatRupiah(dashboardService.getTotalPemasukan())
+        Tooltip pemasukanTooltip = new Tooltip( // Membuat tooltip untuk batang pemasukan
+            "Pemasukan\n" + formatRupiah(dashboardService.getTotalPemasukan()) // Menampilkan total pemasukan dalam format Rupiah pada tooltip.
         );
         
         Tooltip pengeluaranTooltip = new Tooltip(
@@ -272,14 +308,15 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             "Saldo\n" + formatRupiah(dashboardService.getSaldo())
         );
         
-        chart.getData().addAll(
+        chart.getData().addAll( // Menambahkan semua series (pemasukan, pengeluaran, saldo) ke dalam chart agar ditampilkan pada diagram batang.
             pemasukanSeries,
             pengeluaranSeries,
             saldoSeries
         );
 
-        Platform.runLater(() -> {
-            pasangEfek(
+        // Pasang efek pada setiap batang chart
+        Platform.runLater(() -> {  // Menjalankan kode ini pada thread JavaFX setelah semua node chart telah dirender, sehingga node batang sudah tersedia untuk dipasang efek.
+            pasangEfek( // Memanggil method pasangEfek untuk memasang efek pada batang pemasukan.
                 pemasukanSeries.getData().get(0),
                 pemasukanTooltip
             );
@@ -297,21 +334,23 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
     }
 
+    // Method untuk memasang efek pada batang chart
     private void pasangEfek(
-        XYChart.Data<String, Number> data,
-        Tooltip tooltip) {
+        XYChart.Data<String, Number> data, // Parameter data adalah objek Data yang berisi kategori dan nilai dari batang chart yang akan dipasang efek.
+        Tooltip tooltip) { 
 
-        Node bar = data.getNode();
+        Node bar = data.getNode(); // Mendapatkan node batang dari data chart. Node ini adalah representasi visual dari batang chart yang akan dipasang efek.
 
-        if (bar == null) {
+        if (bar == null) { // Jika node batang belum tersedia (misalnya karena chart belum dirender sepenuhnya), maka method ini akan mengembalikan nilai dan tidak melakukan apa-apa.
             return;
         }
 
-        Tooltip.install(bar, tooltip);
+        Tooltip.install(bar, tooltip); // Memasang tooltip pada node batang. Tooltip akan muncul ketika pengguna mengarahkan kursor mouse ke batang chart.
 
+        // Efek hover pada batang chart
         bar.setOnMouseEntered(e -> {
-            bar.setScaleX(1.1);
-            bar.setScaleY(1.05);
+            bar.setScaleX(1.1); // Mengubah skala X (lebar) batang menjadi 1.1 kali ukuran aslinya saat mouse masuk ke area batang, sehingga batang terlihat lebih besar.
+            bar.setScaleY(1.05); // Mengubah skala Y (tinggi) batang menjadi 1.05 kali ukuran aslinya saat mouse masuk ke area batang, sehingga batang terlihat lebih tinggi.
         });
 
         bar.setOnMouseExited(e -> {
