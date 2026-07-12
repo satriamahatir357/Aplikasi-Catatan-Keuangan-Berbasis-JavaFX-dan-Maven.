@@ -193,6 +193,10 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         filterBox.setValue("Semua"); // Set default value dari ComboBox menjadi "Semua"
         filterBox.setPrefWidth(140); // Set lebar ComboBox menjadi 140 piksel
 
+        filterBox.setOnAction(e -> {
+            refreshDashboard(); // Memanggil method refreshDashboard() untuk memperbarui tampilan dashboard berdasarkan filter yang dipilih.
+        });
+
         Label title = new Label("Dashboard");
 
         Region spacer = new Region(); // Membuat sebuah Region kosong yang akan digunakan sebagai spacer untuk memisahkan elemen-elemen dalam HBox.
