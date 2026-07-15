@@ -1,6 +1,7 @@
 package frontend.view;
 
 import backend.DashboardService;
+import backend.FilterService;
 import backend.TransaksiService;
 import javafx.geometry.Pos; // Pos adalah sebuah kelas dalam JavaFX yang digunakan untuk menentukan posisi elemen dalam layout.
 import javafx.scene.chart.BarChart;
@@ -18,10 +19,12 @@ import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang d
 import java.text.NumberFormat;
 import java.util.Locale;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import java.util.Set;
 
 import javafx.scene.text.Text;
+import model.Transaksi;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
@@ -31,6 +34,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         // field class
         private final DashboardService dashboardService;
         private TransaksiService transaksiService;
+        private final FilterService filterService;
 
         private Label pemasukanValue;
         private Label pengeluaranValue;
@@ -46,7 +50,8 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
     public DashboardView(TransaksiService transaksiService) {
         this.transaksiService = transaksiService;
         this.dashboardService = new DashboardService(transaksiService); // DashboardService memakai TransaksiService sebagai sumber data.
-        
+        this.filterService =  new FilterService(); // FilterService digunakan untuk memfilter data transaksi berdasarkan tipe atau periode tertentu.
+
         // Card Pemasukan
         Label pemasukanTitle = new Label("Total Pemasukan");
         pemasukanTitle.getStyleClass().add("card-title");
@@ -194,7 +199,14 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         filterBox.setPrefWidth(140); // Set lebar ComboBox menjadi 140 piksel
 
         filterBox.setOnAction(e -> {
-            refreshDashboard(); // Memanggil method refreshDashboard() untuk memperbarui tampilan dashboard berdasarkan filter yang dipilih.
+            String periode = filterBox.getValue(); // Ambil nilai yang dipilih dari ComboBox dan simpan dalam variabel periode.
+            ObservableList<Transaksi> daftarTransaksi = 
+                filterService.filterPeriode(
+                    transaksiService.getDaftarTransaksi(),
+                    periode // Memanggil method filterPeriode() dari TransaksiService untuk memfilter daftar transaksi berdasarkan periode yang dipilih. Hasil filter disimpan dalam variabel daftarTransaksi.
+                );
+
+            refreshDashboard(daftarTransaksi); // Memanggil method refreshDashboard dengan daftarTransaksi yang telah difilter berdasarkan periode yang dipilih.
         });
 
         Label title = new Label("Dashboard");
@@ -267,6 +279,21 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         );
 
         updateChart();
+    }
+
+    // Method refreshDashboard dengan parameter ObservableList<Transaksi> daftar
+    // perbedaan dengan method refreshDashboard() sebelumnya adalah method ini menerima parameter ObservableList<Transaksi> daftar, sehingga dapat memperbarui tampilan dashboard berdasarkan daftar transaksi yang diberikan sebagai argumen.
+    public void refreshDashboard(ObservableList<Transaksi> daftar) {
+        double pemasukan = dashboardService.getTotalPemasukan(daftar);
+        double pengeluaran = dashboardService.getTotalPengeluaran(daftar);
+        double rataRata = dashboardService.getRataRataNominal(daftar);
+
+        updateDashboard(pemasukan, pengeluaran, rataRata);
+
+        jumlahTransaksiValue.setText(
+            dashboardService.getJumlahTransaksi(daftar) + " Transaksi"
+        );
+
     }
 
     public void updateChart() {
