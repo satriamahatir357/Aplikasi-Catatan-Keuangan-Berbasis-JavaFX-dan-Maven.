@@ -210,6 +210,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         });
 
         Label title = new Label("Dashboard");
+        title.getStyleClass().add("dashboard-title");
 
         Region spacer = new Region(); // Membuat sebuah Region kosong yang akan digunakan sebagai spacer untuk memisahkan elemen-elemen dalam HBox.
         HBox.setHgrow(spacer, Priority.ALWAYS); // Mengatur agar spacer dapat mengisi ruang kosong yang tersedia dalam HBox, sehingga elemen-elemen lain akan terdorong ke sisi kiri dan kanan.
@@ -228,7 +229,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             chartContainer
         );
 
-        content.setSpacing(10);
+        content.setSpacing(15);
         
         // Masukkan card ke DashboardView
         getChildren().add(content);

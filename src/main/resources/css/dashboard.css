@@ -125,3 +125,30 @@
 .default-color2.chart-bar{
     -fx-bar-fill: #3B82F6;
 }
+
+/* == Styling ComboBox == */
+.combo-box{
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+/* Styling dropdown list ComboBox */
+.combo-box .list-cell {
+    -fx-padding: 8 12 8 12;
+}
+
+/* Hover ComboBox */
+.combo-box:hover {
+    -fx-border-color: #3B82F6;
+}
+
+/* Styling Header Dashboard */
+.dashboard-title{
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
