@@ -27,6 +27,7 @@ import backend.SearchService;
 import backend.SortService;
 import backend.TransaksiService; // Mengimpor kelas TransaksiService dari package backend, yang merupakan layanan untuk mengelola transaksi yang akan digunakan dalam view ini
 import model.Transaksi; // Mengimpor kelas Transaksi dari package model, yang merupakan model data untuk transaksi yang akan digunakan dalam
+import javafx.scene.control.TableCell;
 
 public class TransaksiView extends VBox { // extends VBox untuk membuat layout vertikal
     
@@ -157,6 +158,34 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         tipeColumn.setPrefWidth(150);
         // kolom tanggal
         TableColumn<Transaksi, String> tanggalColumn = new TableColumn<>("Tanggal");
+
+        TableColumn<Transaksi, Void> hapusColumn = new TableColumn<>("Hapus"); // TableColumn untuk kolom hapus, tipe data Void karena kolom ini hanya berisi tombol hapus, bukan data dari model Transaksi
+        hapusColumn.setPrefWidth(100);
+
+        hapusColumn.setCellFactory(param -> new TableCell<Transaksi, Void>() {
+            private final Button hapusButton = new Button("Hapus");
+
+            { // Inisialisasi blok untuk mengatur tindakan ketika tombol hapus diklik
+                hapusButton.setOnAction(event -> {
+                    Transaksi transaksi = getTableView().getItems().get(getIndex()); // Ambil data transaksi dari baris yang sesuai dengan tombol hapus yang diklik
+                    transaksiService.getDaftarTransaksi().remove(transaksi); // Hapus transaksi dari daftar transaksi yang dikelola oleh transaksiService
+
+                    updateTable(); // Perbarui tampilan tabel setelah transaksi dihapus
+                    dashboardView.refreshDashboard(); // Perbarui tampilan dashboard setelah transaksi dihapus
+                });
+            }
+
+            @Override // Override untuk mengganti metode updateItem() dari TableColumn, yang digunakan untuk memperbarui tampilan sel dalam kolom hapus
+            protected void updateItem(Void item, boolean empty){ // updateItem() untuk memperbarui tampilan sel dalam kolom hapus, dengan parameter item (data sel) dan empty (apakah sel kosong atau tidak)
+                super.updateItem(item, empty); // super.updateItem(item, empty) untuk memanggil metode updateItem() dari kelas induk TableColumn, agar tetap mempertahankan perilaku dasar dari sel tabel
+                if (empty) {
+                    setGraphic(null); // setGraphic(null) untuk menghapus tampilan tombol hapus jika sel kosong, sehingga tidak ada tombol yang ditampilkan pada baris kosong dalam tabel
+                } else {
+                    setGraphic(hapusButton);
+                }
+            }
+        });
+
         tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
         tanggalColumn.setPrefWidth(150);
         
@@ -168,7 +197,13 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         transaksiTable.setPlaceholder(emptyLabel);
         
-        transaksiTable.getColumns().addAll(keteranganColumn, nominalColumn, tipeColumn, tanggalColumn); // Menambahkan kolom-kolom ke dalam tabel transaksi
+        transaksiTable.getColumns().addAll( // menambahkan kolom-kolom ke dalam tabel transaksi
+            keteranganColumn,
+            nominalColumn,
+            tipeColumn,
+            tanggalColumn,
+            hapusColumn
+        ); // Menambahkan kolom-kolom ke dalam tabel transaksi
 
         // Isi lebar tabel secara otomatis
         transaksiTable.setColumnResizePolicy(
