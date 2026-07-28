@@ -18,6 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert; // komponen popup dialog bawaan JavaFX yang dipakai untuk menampilkan pesan ke user.
+import javafx.beans.property.ReadOnlyObjectWrapper;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -123,19 +124,11 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         Button tambahButton = new Button("Tambah");
         tambahButton.getStyleClass().add("primary-button");
 
-        // tombol edit 
-        Button editButton = new Button("Edit");
-        editButton.getStyleClass().add("edit-button");
-
         // tombol batal edit
         Button batalButton = new Button("Batal");
         batalButton.setVisible(false);
         batalButton.setManaged(false); // batalButton.setManaged(false) = tombolnya memang hilang, tapi ruang kosongnya masih ada.
         batalButton.getStyleClass().add("cancel-button");
-
-        // tombol hapus
-        Button hapusButton = new Button("Hapus");
-        hapusButton.getStyleClass().add("danger-button");
 
         // tabel transaksi
         transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
@@ -159,19 +152,59 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // kolom tanggal
         TableColumn<Transaksi, String> tanggalColumn = new TableColumn<>("Tanggal");
 
+        // tombol hapus di dalam tebel
         TableColumn<Transaksi, Void> hapusColumn = new TableColumn<>("Hapus"); // TableColumn untuk kolom hapus, tipe data Void karena kolom ini hanya berisi tombol hapus, bukan data dari model Transaksi
         hapusColumn.setPrefWidth(100);
+
+        hapusColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
 
         hapusColumn.setCellFactory(param -> new TableCell<Transaksi, Void>() {
             private final Button hapusButton = new Button("Hapus");
 
             { // Inisialisasi blok untuk mengatur tindakan ketika tombol hapus diklik
                 hapusButton.setOnAction(event -> {
-                    Transaksi transaksi = getTableView().getItems().get(getIndex()); // Ambil data transaksi dari baris yang sesuai dengan tombol hapus yang diklik
-                    transaksiService.getDaftarTransaksi().remove(transaksi); // Hapus transaksi dari daftar transaksi yang dikelola oleh transaksiService
+                    // Konfirmasi Hapus
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    
+                    confirm.setTitle("Konfirmasi");
+                    confirm.setHeaderText(null);
+                    confirm.setContentText("Yakin ingin menghapus transaksi ini?");
 
-                    updateTable(); // Perbarui tampilan tabel setelah transaksi dihapus
-                    dashboardView.refreshDashboard(); // Perbarui tampilan dashboard setelah transaksi dihapus
+                    // css alert hapus button
+                    confirm.getDialogPane().getStylesheets().add(
+                        getClass().getResource("/css/transaksi.css").toExternalForm()
+                    );
+                    confirm.getDialogPane().getStyleClass().add("custom-confirm");
+
+                    Button okButton = (Button)
+                                    confirm.getDialogPane()
+                                    .lookupButton(ButtonType.OK);
+
+                    okButton.getStyleClass().add("danger-button");
+
+                    Button cancelButton = (Button)
+                                    confirm.getDialogPane()
+                                    .lookupButton(ButtonType.CANCEL);
+
+                    cancelButton.getStyleClass().add("secondary-button");
+
+                    Optional<ButtonType> result = confirm.showAndWait();
+
+                    if(result.isPresent()
+                        && result.get()==ButtonType.OK){
+
+                        Transaksi transaksi =
+                                getTableView()
+                                .getItems()
+                                .get(getIndex());
+
+                        transaksiService
+                                .hapusTransaksi(transaksi);
+
+                        updateTable();
+
+                        dashboardView.refreshDashboard();
+                    }
                 });
             }
 
@@ -184,6 +217,51 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                     setGraphic(hapusButton);
                 }
             }
+        });
+
+        // tombol edit didalam tabel
+        TableColumn<Transaksi, Void> editColumn = new TableColumn<>("Edit");
+        editColumn.setPrefWidth(100);
+
+        editColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
+
+        editColumn.setCellFactory(param -> new TableCell<Transaksi, Void>(){
+            private final Button editButton = new Button("Edit");
+
+            {
+                
+                editButton.setOnAction(event -> {
+                    Transaksi transaksi = getTableView().getItems().get(getIndex());
+                    transaksiYangDiedit = transaksi;
+                    
+                    keteranganField.setText(transaksi.getKeterangan());
+
+                    nominalField.setText(
+                        String.valueOf(transaksi.getNominal())
+                    );
+
+                    tipeBox.setValue(transaksi.getTipe());
+
+                    tanggalPicker.setValue(LocalDate.parse(transaksi.getTanggal()));
+
+                    tambahButton.setText("Simpan Perubahan");
+
+                    batalButton.setVisible(true);
+                    batalButton.setManaged(true);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty){
+                super.updateItem(item, empty);
+                if(empty){
+                    setGraphic(null);
+                }
+                else{
+                    setGraphic(editButton);
+                }
+            }
+
         });
 
         tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
@@ -202,6 +280,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             nominalColumn,
             tipeColumn,
             tanggalColumn,
+            editColumn,
             hapusColumn
         ); // Menambahkan kolom-kolom ke dalam tabel transaksi
 
@@ -218,9 +297,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         HBox buttonBox = new HBox(
             tambahButton,
-            batalButton,
-            editButton,
-            hapusButton
+            batalButton
         );
 
         buttonBox.setSpacing(15);
@@ -351,31 +428,6 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         
         });
 
-        // === tombol edit ===
-        editButton.setOnAction(e -> {
-            Transaksi selected = transaksiTable.getSelectionModel()
-                                .getSelectedItem();
-
-             // Validasi
-            if(selected == null){
-                    showWarning("Pilih transaksi terlebih dahulu");
-                    return;
-            }
-            transaksiYangDiedit = selected;
-            tambahButton.setText("Simpan Perubahan");
-            batalButton.setVisible(true);
-            batalButton.setManaged(true);
-
-            // Isi form dengan data transaksi yang dipilih
-            keteranganField.setText(selected.getKeterangan());
-               
-            nominalField.setText(String.valueOf(selected.getNominal()));
-
-            tipeBox.setValue(selected.getTipe());
-
-            tanggalPicker.setValue(LocalDate.parse(selected.getTanggal()));
-
-        });
 
         // === tombol batal edit ===
         batalButton.setOnAction(e -> {
@@ -387,100 +439,9 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             tipeBox.setValue("Pemasukan");
 
             tambahButton.setText("Tambah");
-            
             batalButton.setVisible(false);
             batalButton.setManaged(false);
         });
-
-        // === Hapus Button ===
-        hapusButton.setOnAction(e ->{
-            // Ambil transaksi yang dipilih
-            Transaksi selected = transaksiTable.getSelectionModel() //Ambil objek yang bertugas mengelola pemilihan (selection) pada TableView.
-                                .getSelectedItem(); // Ambil data/baris yang sedang dipilih
-
-            // validasi
-            if(selected == null){
-                showWarning("Pilih transaksi terlebih dahulu");
-                return;
-            }
-
-            // Konfirmasi Hapus
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            
-            confirm.setTitle("Konfirmasi");
-            confirm.setHeaderText(null);
-            confirm.setContentText("Yakin ingin menghapus transaksi ini?");
-
-            // css alert hapus button
-            confirm.getDialogPane().getStylesheets().add(
-                getClass().getResource("/css/transaksi.css").toExternalForm()
-            );
-            confirm.getDialogPane().getStyleClass().add("custom-confirm");
-
-            Button okButton = (Button)
-                            confirm.getDialogPane()
-                            .lookupButton(ButtonType.OK);
-
-            okButton.getStyleClass().add("danger-button");
-
-            Button cancelButton = (Button)
-                            confirm.getDialogPane()
-                            .lookupButton(ButtonType.CANCEL);
-
-            cancelButton.getStyleClass().add("secondary-button");   
-
-            // TAMPILKAN POPUP
-            Optional<ButtonType> result = confirm.showAndWait();
-
-            if (result.isPresent() && 
-                result.get() == ButtonType.OK) { // Kalau user memilih sesuatu DAN pilihannya adalah OK maka jalankan proses hapus.
-                    transaksiService.hapusTransaksi(selected); // memanggil method hapusTransaksi dari transaksiService
-                    updateTable();        
-                    dashboardView.refreshDashboard(); // memanggi method dari dashboardView
-                }
-
-            });
-
-            // === tombol edit ===
-            editButton.setOnAction(e -> {
-                Transaksi selected = transaksiTable.getSelectionModel()
-                                    .getSelectedItem();
-
-                 // Validasi
-                if(selected == null){
-                    showWarning("Pilih transaksi terlebih dahulu");
-                    return;
-                }
-                transaksiYangDiedit = selected;
-                tambahButton.setText("Simpan Perubahan");
-                batalButton.setVisible(true);
-                batalButton.setManaged(true);
-
-                 // Isi form dengan data transaksi yang dipilih
-               keteranganField.setText(selected.getKeterangan());
-               
-               nominalField.setText(String.valueOf(selected.getNominal()));
-
-               tipeBox.setValue(selected.getTipe());
-
-               tanggalPicker.setValue(LocalDate.parse(selected.getTanggal()));
-
-            });
-
-            // === tombol batal edit ===
-            batalButton.setOnAction(e -> {
-                transaksiYangDiedit = null;
-
-                keteranganField.clear();
-                nominalField.clear();
-                tanggalPicker.setValue(null);
-                tipeBox.setValue("Pemasukan");
-
-                tambahButton.setText("Tambah");
-
-                batalButton.setVisible(false);
-                batalButton.setManaged(false);
-            });
     }
     
     private void showWarning(String message) {
