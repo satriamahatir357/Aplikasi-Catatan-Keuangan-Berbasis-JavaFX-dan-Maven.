@@ -182,24 +182,6 @@
     -fx-background-color: #1E40AF;
 }
 
-/* === hapus button === */
-.danger-button{
-    -fx-background-color: #ef4444;
-    -fx-text-fill: white;
-    -fx-pref-width: 90px;
-    -fx-pref-height: 40px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8px;
-}
-
-.danger-button:hover{
-    -fx-background-color: #dc2626;
-}
-
-.danger-button:pressed{
-    -fx-background-color: #b91c1c;
-}
-
 /* === alert hapus button === */
 /* Confirmation Dialog */
 .custom-confirm {
@@ -237,25 +219,6 @@
 
 .secondary-button:pressed{
     -fx-background-color: #94A3B8;
-}
-
-/* === tombol edit === */
-.edit-button{
-    -fx-background-color: #F59E0B;
-    -fx-text-fill: white;
-    -fx-pref-width: 90px;
-    -fx-pref-height: 40px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8px;
-    -fx-cursor: hand;
-}
-
-.edit-button:hover{
-    -fx-background-color: #D97706;
-}
-
-.edit-button:pressed{
-    -fx-background-color: #B45309;
 }
 
 /* Tombol Batal */
@@ -302,4 +265,42 @@
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-font-size: 14;
+}
+
+/* == tombol edit di dalam tabel == */
+.table-edit-button{
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius:8;
+    -fx-cursor: hand;
+    -fx-padding: 5 12 5 12; 
+}
+
+.table-edit-button:hover{
+    -fx-background-color: #2563EB;
+}
+
+.table-edit-button:pressed{
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+/* == tombol hapus di dalam tabel == */
+.table-delete-button{
+    -fx-background-color: #EF4444;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius:8;
+    -fx-cursor:hand;
+    -fx-padding: 5 12 5 12;
+}
+
+.table-delete-button:hover{
+    -fx-background-color: #DC2626;
+}
+
+.table-delete-button:pressed{
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
 }

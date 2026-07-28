@@ -160,7 +160,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
         hapusColumn.setCellFactory(param -> new TableCell<Transaksi, Void>() {
             private final Button hapusButton = new Button("Hapus");
-
+            
             { // Inisialisasi blok untuk mengatur tindakan ketika tombol hapus diklik
                 hapusButton.setOnAction(event -> {
                     // Konfirmasi Hapus
@@ -181,19 +181,19 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                                     .lookupButton(ButtonType.OK);
 
                     okButton.getStyleClass().add("danger-button");
-
+                    
                     Button cancelButton = (Button)
-                                    confirm.getDialogPane()
-                                    .lookupButton(ButtonType.CANCEL);
-
+                    confirm.getDialogPane()
+                    .lookupButton(ButtonType.CANCEL);
+                    
                     cancelButton.getStyleClass().add("secondary-button");
-
+                    
                     Optional<ButtonType> result = confirm.showAndWait();
-
+                    
                     if(result.isPresent()
                         && result.get()==ButtonType.OK){
-
-                        Transaksi transaksi =
+                    
+                    Transaksi transaksi =
                                 getTableView()
                                 .getItems()
                                 .get(getIndex());
@@ -206,6 +206,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                         dashboardView.refreshDashboard();
                     }
                 });
+
+                hapusButton.getStyleClass().add("table-delete-button");
             }
 
             @Override // Override untuk mengganti metode updateItem() dari TableColumn, yang digunakan untuk memperbarui tampilan sel dalam kolom hapus
@@ -215,6 +217,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                     setGraphic(null); // setGraphic(null) untuk menghapus tampilan tombol hapus jika sel kosong, sehingga tidak ada tombol yang ditampilkan pada baris kosong dalam tabel
                 } else {
                     setGraphic(hapusButton);
+                    setAlignment(Pos.CENTER);
                 }
             }
         });
@@ -249,6 +252,8 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                     batalButton.setVisible(true);
                     batalButton.setManaged(true);
                 });
+
+                  editButton.getStyleClass().add("table-edit-button");
             }
 
             @Override
@@ -259,6 +264,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 }
                 else{
                     setGraphic(editButton);
+                    setAlignment(Pos.CENTER);
                 }
             }
 
