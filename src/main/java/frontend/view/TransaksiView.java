@@ -32,17 +32,41 @@ import javafx.scene.control.TableCell;
 
 public class TransaksiView extends VBox { // extends VBox untuk membuat layout vertikal
     
+    
+    // === SERVICE ===
     private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
     private SearchService searchService;
-    private DashboardView dashboardView;
-    private Transaksi transaksiYangDiedit = null;
-    private TextField searchField;
-    private TableView<Transaksi> transaksiTable;
     private FilterService filterService;
-    private ComboBox<String> filterBox;
-    private String keyword = "";
-    private ComboBox<String> sortBox;
     private SortService sortService;
+    
+    // === VIEW ===
+    private DashboardView dashboardView;
+    
+    // === SEARCH ===
+    private TextField searchField;
+    private String keyword = "";
+    
+    // === FILTER ===
+    private ComboBox<String> filterBox;
+    
+    // === SORT ===
+    private ComboBox<String> sortBox;
+
+    // === Form ===
+    private TextField keteranganField;
+    private TextField nominalField;
+    private ComboBox<String> tipeBox;
+    private DatePicker tanggalPicker;
+    
+    // === button ===
+    private Button tambahButton;
+    private Button batalButton;
+    
+    // === table ===
+    private TableView<Transaksi> transaksiTable;
+    
+    // === edit ===
+    private Transaksi transaksiYangDiedit = null;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
         this.transaksiService = transaksiService;
@@ -63,31 +87,12 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         createSearch();
         setupSearchEvent();
 
+        // FORM
+        createForm();
+
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
-
-        // input keterangan
-        TextField keteranganField = new TextField(); // TextField untuk input keterangan
-        keteranganField.setPromptText("Masukkan Keterangan"); //setPromptText untuk memberikan petunjuk pada TextField
-        keteranganField.getStyleClass().add("from-input");
-        
-        // input nominal
-        TextField nominalField = new TextField();
-        nominalField.setPromptText("Masukkan Nominal");
-        nominalField.getStyleClass().add("from-input");
-
-        // pilihan tipe
-        ComboBox<String> tipeBox = new ComboBox<>( // ComboBox<string> untuk membuat dropdown pilihan tipe
-            FXCollections.observableArrayList("Pemasukan", "Pengeluaran") // FXCollections.observableArrayList untuk membuat daftar pilihan dalam ComboBox
-        );
-
-        tipeBox.setValue("Pemasukan"); // setValue untuk menetapkan nilai default pada ComboBox
-        tipeBox.getStyleClass().add("from-combo");
-        
-        // pilih tanggal
-        DatePicker tanggalPicker = new DatePicker(); // DatePicker untuk memilih tanggal
-        tanggalPicker.getStyleClass().add("from-date");
 
         // tombol tambah
         Button tambahButton = new Button("Tambah");
@@ -478,6 +483,29 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             keyword = newValue;
             updateTable();
         });
+    }
+
+    // === Form ===
+    private void createForm(){
+        // input keterangan
+        keteranganField = new TextField(); // TextField untuk input keterangan
+        keteranganField.setPromptText("Masukkan Keterangan"); //setPromptText untuk memberikan petunjuk pada TextField
+        keteranganField.getStyleClass().add("from-input");
+
+        // input nominal
+        nominalField = new TextField();
+        nominalField.setPromptText("Masukkan Nominal");
+        nominalField.getStyleClass().add("from-input");
+
+        // pilihan tipe
+        tipeBox = new ComboBox<>( // ComboBox<string> untuk membuat dropdown pilihan tipe
+            FXCollections.observableArrayList("Pemasukan", "Pengeluaran")); // FXCollections.observableArrayList untuk membuat daftar pilihan dalam ComboBox
+        tipeBox.setValue("Pemasukan"); // setValue untuk menetapkan nilai default pada ComboBox
+        tipeBox.getStyleClass().add("from-combo");
+
+        // pilih tanggal
+        tanggalPicker = new DatePicker(); // DatePicker untuk memilih tanggal
+        tanggalPicker.getStyleClass().add("from-date");
     }
 
     private void showWarning(String message) {
