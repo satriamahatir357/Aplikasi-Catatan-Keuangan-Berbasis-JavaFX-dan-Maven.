@@ -87,22 +87,15 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         createSearch();
         setupSearchEvent();
 
-        // FORM
+        // === FORM ===
         createForm();
+        
+        // === button ===
+        createButton();
 
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
-
-        // tombol tambah
-        Button tambahButton = new Button("Tambah");
-        tambahButton.getStyleClass().add("primary-button");
-
-        // tombol batal edit
-        Button batalButton = new Button("Batal");
-        batalButton.setVisible(false);
-        batalButton.setManaged(false); // batalButton.setManaged(false) = tombolnya memang hilang, tapi ruang kosongnya masih ada.
-        batalButton.getStyleClass().add("cancel-button");
 
         // tabel transaksi
         transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
@@ -506,6 +499,19 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // pilih tanggal
         tanggalPicker = new DatePicker(); // DatePicker untuk memilih tanggal
         tanggalPicker.getStyleClass().add("from-date");
+    }
+
+    // === button ===
+    private void createButton(){
+        // tombol tambah
+        tambahButton = new Button("Tambah");
+        tambahButton.getStyleClass().add("primary-button");
+
+        // tombol batal edit
+        batalButton = new Button("Batal");
+        batalButton.setVisible(false);
+        batalButton.setManaged(false); // batalButton.setManaged(false) = tombolnya memang hilang, tapi ruang kosongnya masih ada.
+        batalButton.getStyleClass().add("cancel-button");
     }
 
     private void showWarning(String message) {
