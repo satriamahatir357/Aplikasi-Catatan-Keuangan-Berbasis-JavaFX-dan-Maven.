@@ -12,14 +12,7 @@ public class DashboardService {
 
     // Method getTotalPemasukan()
     public double getTotalPemasukan(){
-        double  total = 0; // Inisialisasi variabel total untuk menyimpan jumlah total pemasukan.
-
-        for (Transaksi transaksi : transaksiService.getDaftarTransaksi()) {
-            if (transaksi.getTipe().equals("Pemasukan")) {
-                total += transaksi.getNominal();
-            }
-        }
-        return total; // Mengembalikan jumlah total pemasukan yang telah dihitung.
+        return getTotalPemasukan(transaksiService.getDaftarTransaksi());
     }
 
     // Method getTotalPemasukan() dengan parameter ObservableList<Transaksi> 
@@ -38,14 +31,7 @@ public class DashboardService {
 
     // Method getTotalPengeluaran()
     public double getTotalPengeluaran(){
-        double total = 0; // Inisialisasi variabel total untuk menyimpan jumlah total pengeluaran.
-
-        for (Transaksi transaksi : transaksiService.getDaftarTransaksi()) { // transaksiService.getDaftarTransaksi() Artinya: Ambil daftar semua transaksi dari transaksiService
-            if (transaksi.getTipe().equals("Pengeluaran")) {
-                total += transaksi.getNominal();
-            }
-        }
-        return total; // Mengembalikan jumlah total pengeluaran yang telah dihitung.
+        return getTotalPengeluaran(transaksiService.getDaftarTransaksi());
     }
 
     // Method getTotalPengeluaran() dengan parameter ObservableList<Transaksi>
@@ -64,7 +50,7 @@ public class DashboardService {
 
     // Method getSaldo()
     public double getSaldo(){
-        return getTotalPemasukan() - getTotalPengeluaran(); // Menghitung saldo dengan mengurangi total pengeluaran dari total pemasukan menggunakan metode getTotalPemasukan() dan getTotalPengeluaran().
+        return getSaldo(transaksiService.getDaftarTransaksi());
     }
 
     public double getSaldo(ObservableList<Transaksi> daftar){
@@ -72,7 +58,7 @@ public class DashboardService {
     }
 
     public int getJumlahTransaksi(){
-        return transaksiService.getDaftarTransaksi().size(); // Kenapa cukup size()? Karena getDaftarTransaksi() mengembalikan ObservableList<Transaksi>, dan size() langsung memberi jumlah item di dalam list.
+        return getJumlahTransaksi(transaksiService.getDaftarTransaksi());
     }
 
     public int getJumlahTransaksi(ObservableList<Transaksi> daftar){
@@ -80,19 +66,7 @@ public class DashboardService {
     } 
 
     public double getRataRataNominal(){
-        if(transaksiService.getDaftarTransaksi().isEmpty()){
-            return 0;
-        }
-
-        double total = 0;
-
-        // Untuk setiap transaksi yang ada di daftar transaksi, ambil nilai nominalnya lalu tambahkan ke variabel total.
-        for(Transaksi transaksi : transaksiService.getDaftarTransaksi()){ // transaksiService.getDaftarTransaksi() Artinya: Ambil daftar semua transaksi dari transaksiService
-            total += transaksi.getNominal();
-        }
-
-        return total / transaksiService.getDaftarTransaksi().size();
-        
+        return getRataRataNominal(transaksiService.getDaftarTransaksi());
     }
 
     // Method getRataRataNominal() dengan parameter ObservableList<Transaksi> daftar

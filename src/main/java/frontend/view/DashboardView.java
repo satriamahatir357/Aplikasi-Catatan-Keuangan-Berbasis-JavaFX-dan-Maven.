@@ -269,17 +269,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
     // Method refreshDashboard
     public void refreshDashboard(){
-        double pemasukan = dashboardService.getTotalPemasukan();
-        double pengeluaran = dashboardService.getTotalPengeluaran();
-        double rataRata = dashboardService.getRataRataNominal();
-
-        updateDashboard(pemasukan, pengeluaran, rataRata);
-        
-        jumlahTransaksiValue.setText(
-            dashboardService.getJumlahTransaksi() + " Transaksi"
-        );
-
-        updateChart();
+        refreshDashboard(transaksiService.getDaftarTransaksi());
     }
 
     // Method refreshDashboard dengan parameter ObservableList<Transaksi> daftar
@@ -299,72 +289,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
     }
 
     public void updateChart() {
-        chart.getData().clear(); // Menghapus semua data yang ada di chart agar tidak menumpuk saat chart diperbarui.
-        labelPane.getChildren().clear(); // Menghapus semua label yang ada di labelPane agar tidak menumpuk saat chart diperbarui.
-        // Series Pemasukan
-        XYChart.Series<String, Number> pemasukanSeries = new XYChart.Series<>(); // Membuat sebuah series baru untuk data pemasukan. Series ini akan berisi pasangan kategori (String) dan nilai (Number) yang akan ditampilkan pada chart.
-        pemasukanSeries.getData().add( // Menambahkan data pemasukan ke dalam series. Data ini terdiri dari kategori "Pemasukan" dan nilai total pemasukan yang diperoleh dari dashboardService.
-            new XYChart.Data<>( // Membuat sebuah objek Data baru yang berisi kategori dan nilai. Objek ini akan ditambahkan ke dalam series pemasukanSeries.
-                "Pemasukan",
-                dashboardService.getTotalPemasukan() 
-            )
-        );
-
-        // Series Pengeluaran
-        XYChart.Series<String, Number> pengeluaranSeries = new XYChart.Series<>();
-        pengeluaranSeries.getData().add(
-            new XYChart.Data<>(
-                "Pengeluaran",
-                dashboardService.getTotalPengeluaran()
-            )
-        );
-
-        // Series Saldo
-        XYChart.Series<String, Number> saldoSeries = new XYChart.Series<>();
-        saldoSeries.getData().add(
-            new XYChart.Data<>(
-                "Saldo",
-                dashboardService.getSaldo()
-            )
-        );
-
-        // Tooltip pada setiap batang
-        Tooltip pemasukanTooltip = new Tooltip( // Membuat tooltip untuk batang pemasukan
-            "Pemasukan\n" + formatRupiah(dashboardService.getTotalPemasukan()) // Menampilkan total pemasukan dalam format Rupiah pada tooltip.
-        );
-        
-        Tooltip pengeluaranTooltip = new Tooltip(
-            "Pengeluaran\n" + formatRupiah(dashboardService.getTotalPengeluaran())
-        );
-        
-        Tooltip saldoTooltip = new Tooltip(
-            "Saldo\n" + formatRupiah(dashboardService.getSaldo())
-        );
-        
-        chart.getData().addAll( // Menambahkan semua series (pemasukan, pengeluaran, saldo) ke dalam chart agar ditampilkan pada diagram batang.
-            pemasukanSeries,
-            pengeluaranSeries,
-            saldoSeries
-        );
-
-        // Pasang efek pada setiap batang chart
-        Platform.runLater(() -> {  // Menjalankan kode ini pada thread JavaFX setelah semua node chart telah dirender, sehingga node batang sudah tersedia untuk dipasang efek.
-            pasangEfek( // Memanggil method pasangEfek untuk memasang efek pada batang pemasukan.
-                pemasukanSeries.getData().get(0),
-                pemasukanTooltip
-            );
-
-            pasangEfek(
-                pengeluaranSeries.getData().get(0),
-                pengeluaranTooltip
-            );
-
-            pasangEfek(
-                saldoSeries.getData().get(0),
-                saldoTooltip
-            );
-        });
-
+        updateChart(transaksiService.getDaftarTransaksi());
     }
 
     public void updateChart(ObservableList<Transaksi> daftar) {

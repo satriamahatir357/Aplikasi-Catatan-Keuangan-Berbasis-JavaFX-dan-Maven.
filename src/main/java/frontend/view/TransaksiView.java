@@ -45,58 +45,27 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private SortService sortService;
 
     public TransaksiView(TransaksiService transaksiService, DashboardView dashboardView){
-         this.transaksiService = transaksiService;
-         this.dashboardView = dashboardView;
+        this.transaksiService = transaksiService;
+        this.dashboardView = dashboardView;
         this.searchService = new SearchService();
         this.filterService = new FilterService();
         this.sortService = new SortService();
+        
+        // === filterbox ===
+        createFilter(); // memanggil method filterbox
+        setupFilterEvent(); // memanggil method event filterbox
 
-        // inisialisasi filterBox
-        filterBox = new ComboBox<>();
-        filterBox.getItems().addAll("Semua", "Pemasukan", "Pengeluaran");
-        filterBox.setValue("Semua");
-        filterBox.getStyleClass().add("filter-box");
-        
-        // Buat sortBox
-        sortBox = new ComboBox<>();
-        
-        sortBox.getItems().addAll(
-            "Terbaru",
-            "Terlama",
-            "Nominal Terbesar",
-            "Nominal Terkecil",
-            "A-Z",
-            "Z-A"
-        );
-        sortBox.setValue("Terbaru");
-        sortBox.getStyleClass().add("sort-box");
-        
-        // Setiap kali pengguna mengganti pilihan pada filterBox, panggil updateTable() agar isi tabel diperbarui sesuai filter yang dipilih.
-        filterBox.valueProperty().addListener((observable, oldValue, newValue)-> {
-        updateTable();
-        });
+        // === softBox ===
+        createSort();
+        setupSortEvent();
 
-        // Setiap kali pilihan pada sortBox berubah, panggil updateTable() agar tabel diperbarui sesuai pilihan terbaru
-        sortBox.valueProperty() // Ambil property nilai yang sedang dipilih pada sortBox.
-                .addListener( // Tambahkan "pendengar" (listener).
-                    (observable, oldValue, newValue)-> { // Ini adalah lambda expression. Artinya: Saat nilai berubah, Java memberikan tiga informasi:
-            updateTable(); // Muat ulang isi tabel sesuai pilihan terbaru.
-        });
+        // === search ===
+        createSearch();
+        setupSearchEvent();
 
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
-
-        // search
-        searchField = new TextField();
-        searchField.setPromptText("Cari transaksi...");
-        searchField.getStyleClass().add("search-field");
-        searchField.setMaxWidth(Double.MAX_VALUE);
-
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            keyword = newValue;
-            updateTable();
-        });
 
         // input keterangan
         TextField keteranganField = new TextField(); // TextField untuk input keterangan
@@ -449,7 +418,68 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             batalButton.setManaged(false);
         });
     }
+
+    // method untuk filter
+    private void createFilter(){
+        // inisialisasi filterBox
+        filterBox = new ComboBox<>();
+        filterBox.getItems().addAll("Semua", "Pemasukan", "Pengeluaran");
+        filterBox.setValue("Semua");
+        filterBox.getStyleClass().add("filter-box");
+    }
+
+    // method event filterbox
+    private void setupFilterEvent(){
+        // Setiap kali pengguna mengganti pilihan pada filterBox, panggil updateTable() agar isi tabel diperbarui sesuai filter yang dipilih.
+        filterBox.valueProperty().addListener((observable, oldValue, newValue)-> {
+        updateTable();
+        });
+    }
+
+    // method sortBox
+    private void createSort(){
+        // Buat sortBox
+        sortBox = new ComboBox<>();
+        
+        sortBox.getItems().addAll(
+            "Terbaru",
+            "Terlama",
+            "Nominal Terbesar",
+            "Nominal Terkecil",
+            "A-Z",
+            "Z-A"
+        );
+        sortBox.setValue("Terbaru");
+        sortBox.getStyleClass().add("sort-box");
+    }
+
+    // method untuk event sortBox
+    private void setupSortEvent(){
+        // Setiap kali pilihan pada sortBox berubah, panggil updateTable() agar tabel diperbarui sesuai pilihan terbaru
+        sortBox.valueProperty() // Ambil property nilai yang sedang dipilih pada sortBox.
+        .addListener( // Tambahkan "pendengar" (listener).
+        (observable, oldValue, newValue)-> { // Ini adalah lambda expression. Artinya: Saat nilai berubah, Java memberikan tiga informasi:
+            updateTable(); // Muat ulang isi tabel sesuai pilihan terbaru.
+        });
+    }
     
+    // method untuk search
+    private void createSearch(){
+        // search
+        searchField = new TextField();
+        searchField.setPromptText("Cari transaksi...");
+        searchField.getStyleClass().add("search-field");
+        searchField.setMaxWidth(Double.MAX_VALUE);
+    }
+    
+    // method untuk event search
+    private void setupSearchEvent(){
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            keyword = newValue;
+            updateTable();
+        });
+    }
+
     private void showWarning(String message) {
 
         Alert alert = new Alert(Alert.AlertType.WARNING);
