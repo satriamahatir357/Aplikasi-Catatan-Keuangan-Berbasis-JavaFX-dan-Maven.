@@ -102,123 +102,13 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // === tabel ===
         createTable();
 
+        // === Menambahkan logika tombol Edit dan Hapus yang di dalam tabel ===
+        setupEditCellFactory();
+        setupHapusCellFactory();
+
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
-
-        // tombol hapus di dalam tebel
-        TableColumn<Transaksi, Void> hapusColumn = new TableColumn<>("Hapus"); // TableColumn untuk kolom hapus, tipe data Void karena kolom ini hanya berisi tombol hapus, bukan data dari model Transaksi
-        hapusColumn.setPrefWidth(100);
-
-        hapusColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
-
-        hapusColumn.setCellFactory(param -> new TableCell<Transaksi, Void>() {
-            private final Button hapusButton = new Button("Hapus");
-            
-            { // Inisialisasi blok untuk mengatur tindakan ketika tombol hapus diklik
-                hapusButton.setOnAction(event -> {
-                    // Konfirmasi Hapus
-                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-                    
-                    confirm.setTitle("Konfirmasi");
-                    confirm.setHeaderText(null);
-                    confirm.setContentText("Yakin ingin menghapus transaksi ini?");
-
-                    // css alert hapus button
-                    confirm.getDialogPane().getStylesheets().add(
-                        getClass().getResource("/css/transaksi.css").toExternalForm()
-                    );
-                    confirm.getDialogPane().getStyleClass().add("custom-confirm");
-
-                    Button okButton = (Button)
-                                    confirm.getDialogPane()
-                                    .lookupButton(ButtonType.OK);
-
-                    okButton.getStyleClass().add("danger-button");
-                    
-                    Button cancelButton = (Button)
-                    confirm.getDialogPane()
-                    .lookupButton(ButtonType.CANCEL);
-                    
-                    cancelButton.getStyleClass().add("secondary-button");
-                    
-                    Optional<ButtonType> result = confirm.showAndWait();
-                    
-                    if(result.isPresent()
-                        && result.get()==ButtonType.OK){
-                    
-                    Transaksi transaksi =
-                                getTableView()
-                                .getItems()
-                                .get(getIndex());
-
-                        transaksiService
-                                .hapusTransaksi(transaksi);
-
-                        updateTable();
-
-                        dashboardView.refreshDashboard();
-                    }
-                });
-
-                hapusButton.getStyleClass().add("table-delete-button");
-            }
-
-            @Override // Override untuk mengganti metode updateItem() dari TableColumn, yang digunakan untuk memperbarui tampilan sel dalam kolom hapus
-            protected void updateItem(Void item, boolean empty){ // updateItem() untuk memperbarui tampilan sel dalam kolom hapus, dengan parameter item (data sel) dan empty (apakah sel kosong atau tidak)
-                super.updateItem(item, empty); // super.updateItem(item, empty) untuk memanggil metode updateItem() dari kelas induk TableColumn, agar tetap mempertahankan perilaku dasar dari sel tabel
-                if (empty) {
-                    setGraphic(null); // setGraphic(null) untuk menghapus tampilan tombol hapus jika sel kosong, sehingga tidak ada tombol yang ditampilkan pada baris kosong dalam tabel
-                } else {
-                    setGraphic(hapusButton);
-                    setAlignment(Pos.CENTER);
-                }
-            }
-        });
-
-        editColumn.setCellFactory(param -> new TableCell<Transaksi, Void>(){
-            private final Button editButton = new Button("Edit");
-
-            {
-                
-                editButton.setOnAction(event -> {
-                    Transaksi transaksi = getTableView().getItems().get(getIndex());
-                    transaksiYangDiedit = transaksi;
-                    
-                    keteranganField.setText(transaksi.getKeterangan());
-
-                    nominalField.setText(
-                        String.valueOf(transaksi.getNominal())
-                    );
-
-                    tipeBox.setValue(transaksi.getTipe());
-
-                    tanggalPicker.setValue(LocalDate.parse(transaksi.getTanggal()));
-
-                    tambahButton.setText("Simpan Perubahan");
-
-                    batalButton.setVisible(true);
-                    batalButton.setManaged(true);
-                });
-
-                  editButton.getStyleClass().add("table-edit-button");
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty){
-                super.updateItem(item, empty);
-                if(empty){
-                    setGraphic(null);
-                }
-                else{
-                    setGraphic(editButton);
-                    setAlignment(Pos.CENTER);
-                }
-            }
-
-        });
-        
-        transaksiTable.setPrefHeight(300); // setPrefHeight untuk mengatur tinggi tabel transaksi
         
         // Empty State Table
         Label emptyLabel = new Label("Belum ada transaksi");
@@ -508,6 +398,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
         transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
         transaksiTable.getStyleClass().add("transaksi-table");
+        transaksiTable.setPrefHeight(300); // setPrefHeight untuk mengatur tinggi tabel transaksi
     }
     private void createKeteranganColumn(){
         // kolom keterangan
@@ -551,6 +442,118 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         hapusColumn.setPrefWidth(100);
 
         hapusColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
+    }
+
+    private void setupEditCellFactory() {
+        //  logika tombol Edit didalam tabel
+        editColumn.setCellFactory(param -> new TableCell<Transaksi, Void>(){
+            private final Button editButton = new Button("Edit");
+
+            {
+                
+                editButton.setOnAction(event -> {
+                    Transaksi transaksi = getTableView().getItems().get(getIndex());
+                    transaksiYangDiedit = transaksi;
+                    
+                    keteranganField.setText(transaksi.getKeterangan());
+
+                    nominalField.setText(
+                        String.valueOf(transaksi.getNominal())
+                    );
+
+                    tipeBox.setValue(transaksi.getTipe());
+
+                    tanggalPicker.setValue(LocalDate.parse(transaksi.getTanggal()));
+
+                    tambahButton.setText("Simpan Perubahan");
+
+                    batalButton.setVisible(true);
+                    batalButton.setManaged(true);
+                });
+
+                  editButton.getStyleClass().add("table-edit-button");
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty){
+                super.updateItem(item, empty);
+                if(empty){
+                    setGraphic(null);
+                }
+                else{
+                    setGraphic(editButton);
+                    setAlignment(Pos.CENTER);
+                }
+            }
+            
+        });
+    }
+    
+    private void setupHapusCellFactory() {
+        //  logika tombol Hapus didalam tabel
+        hapusColumn.setCellFactory(param -> new TableCell<Transaksi, Void>() {
+            private final Button hapusButton = new Button("Hapus");
+            
+            { // Inisialisasi blok untuk mengatur tindakan ketika tombol hapus diklik
+                hapusButton.setOnAction(event -> {
+                    // Konfirmasi Hapus
+                    Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    
+                    confirm.setTitle("Konfirmasi");
+                    confirm.setHeaderText(null);
+                    confirm.setContentText("Yakin ingin menghapus transaksi ini?");
+
+                    // css alert hapus button
+                    confirm.getDialogPane().getStylesheets().add(
+                        getClass().getResource("/css/transaksi.css").toExternalForm()
+                    );
+                    confirm.getDialogPane().getStyleClass().add("custom-confirm");
+
+                    Button okButton = (Button)
+                                    confirm.getDialogPane()
+                                    .lookupButton(ButtonType.OK);
+
+                    okButton.getStyleClass().add("danger-button");
+                    
+                    Button cancelButton = (Button)
+                    confirm.getDialogPane()
+                    .lookupButton(ButtonType.CANCEL);
+                    
+                    cancelButton.getStyleClass().add("secondary-button");
+                    
+                    Optional<ButtonType> result = confirm.showAndWait();
+                    
+                    if(result.isPresent()
+                        && result.get()==ButtonType.OK){
+                    
+                    Transaksi transaksi =
+                                getTableView()
+                                .getItems()
+                                .get(getIndex());
+
+                        transaksiService
+                                .hapusTransaksi(transaksi);
+
+                        updateTable();
+
+                        dashboardView.refreshDashboard();
+                    }
+                });
+
+                hapusButton.getStyleClass().add("table-delete-button");
+            }
+
+            @Override // Override untuk mengganti metode updateItem() dari TableColumn, yang digunakan untuk memperbarui tampilan sel dalam kolom hapus
+            protected void updateItem(Void item, boolean empty){ // updateItem() untuk memperbarui tampilan sel dalam kolom hapus, dengan parameter item (data sel) dan empty (apakah sel kosong atau tidak)
+                super.updateItem(item, empty); // super.updateItem(item, empty) untuk memanggil metode updateItem() dari kelas induk TableColumn, agar tetap mempertahankan perilaku dasar dari sel tabel
+                if (empty) {
+                    setGraphic(null); // setGraphic(null) untuk menghapus tampilan tombol hapus jika sel kosong, sehingga tidak ada tombol yang ditampilkan pada baris kosong dalam tabel
+                } else {
+                    setGraphic(hapusButton);
+                    setAlignment(Pos.CENTER);
+                }
+            }
+        });
     }
 
     private void showWarning(String message) {
