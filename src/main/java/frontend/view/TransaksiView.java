@@ -64,6 +64,12 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     
     // === table ===
     private TableView<Transaksi> transaksiTable;
+    private TableColumn<Transaksi,String> keteranganColumn;
+    private TableColumn<Transaksi,Double> nominalColumn;
+    private TableColumn<Transaksi,String> tipeColumn;
+    private TableColumn<Transaksi,String> tanggalColumn;
+    private TableColumn<Transaksi,Void> editColumn;
+    private TableColumn<Transaksi,Void> hapusColumn;
     
     // === edit ===
     private Transaksi transaksiYangDiedit = null;
@@ -93,31 +99,12 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // === button ===
         createButton();
 
+        // === tabel ===
+        createTable();
+
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
-
-        // tabel transaksi
-        transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
-        transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
-        transaksiTable.getStyleClass().add("transaksi-table");
-
-        // kolom keterangan
-        TableColumn<Transaksi, String> keteranganColumn = new TableColumn<>("Keterangan"); // TableColumn untuk kolom keterangan, tipe data String
-        keteranganColumn.setCellValueFactory(new PropertyValueFactory<>("keterangan")); // setCellValueFactory untuk menghubungkan kolom dengan properti keterangan dalam model Transaksi
-        keteranganColumn.setPrefWidth(250); // setPrefWidth untuk mengatur lebar kolom keterangan
-
-        // kolom nominal
-        TableColumn<Transaksi, Double> nominalColumn = new TableColumn<>("Nominal");
-        nominalColumn.setCellValueFactory(new PropertyValueFactory<>("nominal")); // PropertyValueFactory untuk menghubungkan kolom dengan properti nominal dalam model Transaksi
-        nominalColumn.setPrefWidth(150);
-
-        // kolom tipe
-        TableColumn<Transaksi, String> tipeColumn = new TableColumn<>("Tipe");
-        tipeColumn.setCellValueFactory(new PropertyValueFactory<>("tipe")); // PropertyValueFactory untuk menghubungkan kolom dengan properti tipe dalam model Transaksi
-        tipeColumn.setPrefWidth(150);
-        // kolom tanggal
-        TableColumn<Transaksi, String> tanggalColumn = new TableColumn<>("Tanggal");
 
         // tombol hapus di dalam tebel
         TableColumn<Transaksi, Void> hapusColumn = new TableColumn<>("Hapus"); // TableColumn untuk kolom hapus, tipe data Void karena kolom ini hanya berisi tombol hapus, bukan data dari model Transaksi
@@ -189,12 +176,6 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             }
         });
 
-        // tombol edit didalam tabel
-        TableColumn<Transaksi, Void> editColumn = new TableColumn<>("Edit");
-        editColumn.setPrefWidth(100);
-
-        editColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
-
         editColumn.setCellFactory(param -> new TableCell<Transaksi, Void>(){
             private final Button editButton = new Button("Edit");
 
@@ -236,9 +217,6 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
             }
 
         });
-
-        tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
-        tanggalColumn.setPrefWidth(150);
         
         transaksiTable.setPrefHeight(300); // setPrefHeight untuk mengatur tinggi tabel transaksi
         
@@ -512,6 +490,67 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         batalButton.setVisible(false);
         batalButton.setManaged(false); // batalButton.setManaged(false) = tombolnya memang hilang, tapi ruang kosongnya masih ada.
         batalButton.getStyleClass().add("cancel-button");
+    }
+
+    // === Tabel ===
+    private void createTable(){
+        createTableView();
+        createKeteranganColumn();
+        createNominalColumn();
+        createTipeColumn();
+        createTanggalColumn();
+        createEditColumn();
+        createHapusColumn();
+    }
+
+    private void createTableView(){
+        // tabel transaksi
+        transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
+        transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
+        transaksiTable.getStyleClass().add("transaksi-table");
+    }
+    private void createKeteranganColumn(){
+        // kolom keterangan
+        keteranganColumn = new TableColumn<>("Keterangan"); // TableColumn untuk kolom keterangan, tipe data String
+        keteranganColumn.setCellValueFactory(new PropertyValueFactory<>("keterangan")); // setCellValueFactory untuk menghubungkan kolom dengan properti keterangan dalam model Transaksi
+        keteranganColumn.setPrefWidth(250); // setPrefWidth untuk mengatur lebar kolom keterangan
+    }
+
+    private void createNominalColumn(){
+        // kolom nominal
+        nominalColumn = new TableColumn<>("Nominal");
+        nominalColumn.setCellValueFactory(new PropertyValueFactory<>("nominal")); // PropertyValueFactory untuk menghubungkan kolom dengan properti nominal dalam model Transaksi
+        nominalColumn.setPrefWidth(150);
+    }
+
+    private void createTipeColumn(){
+        // kolom tipe
+        tipeColumn = new TableColumn<>("Tipe");
+        tipeColumn.setCellValueFactory(new PropertyValueFactory<>("tipe")); // PropertyValueFactory untuk menghubungkan kolom dengan properti tipe dalam model Transaksi
+        tipeColumn.setPrefWidth(150);
+    }
+
+    private void createTanggalColumn(){
+        // kolom tanggal
+        tanggalColumn = new TableColumn<>("Tanggal");
+        tanggalColumn.setCellValueFactory(new PropertyValueFactory<>("tanggal"));
+        tanggalColumn.setPrefWidth(150);
+    }
+
+    private void createEditColumn(){
+        // tombol edit didalam tabel
+        editColumn = new TableColumn<>("Edit");
+        editColumn.setPrefWidth(100);
+
+        editColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
+    }
+
+    private void createHapusColumn(){
+        // tombol hapus di dalam tebel
+        hapusColumn = new TableColumn<>("Hapus"); // TableColumn untuk kolom hapus, tipe data Void karena kolom ini hanya berisi tombol hapus, bukan data dari model Transaksi
+        hapusColumn.setPrefWidth(100);
+
+        hapusColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(null));
     }
 
     private void showWarning(String message) {
