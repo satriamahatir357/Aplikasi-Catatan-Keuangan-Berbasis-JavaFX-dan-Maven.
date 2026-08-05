@@ -102,10 +102,6 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // === tabel ===
         createTable();
 
-        // === Menambahkan logika tombol Edit dan Hapus yang di dalam tabel ===
-        setupEditCellFactory();
-        setupHapusCellFactory();
-
         // label
         Label title = new Label("Tambah Transaksi");
         title.getStyleClass().add("from-title");
@@ -197,94 +193,13 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
 
 
         // event handler untuk tombol tambah
-        tambahButton.setOnAction(e -> {
-            // Ambil data dari inputan
-
-            // input keterangan
-            String keterangan = keteranganField.getText(); // Mengambil teks dari keteranganField dan menyimpannya dalam variabel keterangan
-            if (keterangan.isBlank()) {
-                showWarning("Keterangan tidak boleh kosong!");
-                return;
-            }
-
-            // == input nominal ==
-            // validasi ketika kosong
-            if (nominalField.getText().isBlank()) {
-                showWarning("Nominal tidak boleh kosong!");
-                return;
-            }
-            
-            // validasi ketika input bukan angka
-            double nominal;
-            
-            try {
-                nominal = Double.parseDouble(nominalField.getText());
-            }catch (NumberFormatException ex) {
-                showWarning("Nominal harus berupa angka!");
-                return;
-            }
-
-            // memilih pemasukan atau pengeluaran
-            String tipe = tipeBox.getValue(); // Mengambil nilai yang dipilih dari tipeBox dan menyimpannya dalam variabel tipe
-            
-            // memilih tanggal transaksi
-            if (tanggalPicker.getValue() == null) {
-                showWarning("Tanggal harus dipilih!");
-                return;
-            }
-
-            String tanggal = tanggalPicker.
-                            getValue().
-                            toString(); // Mengambil nilai yang dipilih dari tanggalPicker, mengubahnya menjadi string, dan menyimpannya dalam variabel tanggal
-
-            Transaksi transaksi = new Transaksi(keterangan, nominal, tipe, tanggal);
-
-            if(transaksiYangDiedit == null){
-                // Mode tamah
-                transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
-            }
-            else{
-                transaksiYangDiedit.setKeterangan(keterangan);
-                transaksiYangDiedit.setNominal(nominal);
-                transaksiYangDiedit.setTipe(tipe);
-                transaksiYangDiedit.setTanggal(tanggal);
-
-                transaksiTable.refresh();
-
-                transaksiService.updateTransaksi();
-
-                transaksiYangDiedit = null;
-                tambahButton.setText("Tambah");
-                batalButton.setVisible(false);
-                batalButton.setManaged(false);
-            }
-            updateTable(); 
-            dashboardView.refreshDashboard(); 
-
-            // scroll ui
-            keteranganField.clear();
-            nominalField.clear();
-            tanggalPicker.setValue(null);
-            tipeBox.setValue("Pemasukan");
-        
-        });
-
+        tambahButton.setOnAction(e -> handleTambahButton());
 
         // === tombol batal edit ===
-        batalButton.setOnAction(e -> {
-            transaksiYangDiedit = null;
+        batalButton.setOnAction(e -> handleBatalButton());
 
-            keteranganField.clear();
-            nominalField.clear();
-            tanggalPicker.setValue(null);
-            tipeBox.setValue("Pemasukan");
-
-            tambahButton.setText("Tambah");
-            batalButton.setVisible(false);
-            batalButton.setManaged(false);
-        });
     }
-
+    
     // method untuk filter
     private void createFilter(){
         // inisialisasi filterBox
@@ -391,6 +306,10 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         createTanggalColumn();
         createEditColumn();
         createHapusColumn();
+
+        // === logika tombol Edit dan Hapus yang di dalam tabel ===
+        setupEditCellFactory();
+        setupHapusCellFactory();
     }
 
     private void createTableView(){
@@ -554,6 +473,92 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                 }
             }
         });
+    }
+
+    private void handleTambahButton() {
+            // Ambil data dari inputan
+
+            // input keterangan
+            String keterangan = keteranganField.getText(); // Mengambil teks dari keteranganField dan menyimpannya dalam variabel keterangan
+            if (keterangan.isBlank()) {
+                showWarning("Keterangan tidak boleh kosong!");
+                return;
+            }
+
+            // == input nominal ==
+            // validasi ketika kosong
+            if (nominalField.getText().isBlank()) {
+                showWarning("Nominal tidak boleh kosong!");
+                return;
+            }
+            
+            // validasi ketika input bukan angka
+            double nominal;
+            
+            try {
+                nominal = Double.parseDouble(nominalField.getText());
+            }catch (NumberFormatException ex) {
+                showWarning("Nominal harus berupa angka!");
+                return;
+            }
+
+            // memilih pemasukan atau pengeluaran
+            String tipe = tipeBox.getValue(); // Mengambil nilai yang dipilih dari tipeBox dan menyimpannya dalam variabel tipe
+            
+            // memilih tanggal transaksi
+            if (tanggalPicker.getValue() == null) {
+                showWarning("Tanggal harus dipilih!");
+                return;
+            }
+
+            String tanggal = tanggalPicker.
+                            getValue().
+                            toString(); // Mengambil nilai yang dipilih dari tanggalPicker, mengubahnya menjadi string, dan menyimpannya dalam variabel tanggal
+
+            Transaksi transaksi = new Transaksi(keterangan, nominal, tipe, tanggal);
+
+            if(transaksiYangDiedit == null){
+                // Mode tamah
+                transaksiService.tambahTransaksi(transaksi); // Memanggil metode tambahTransaksi pada transaksiService untuk menambahkan transaksi baru ke dalam daftar transaksi yang dikelola oleh transaksiService
+            }
+            else{
+                transaksiYangDiedit.setKeterangan(keterangan);
+                transaksiYangDiedit.setNominal(nominal);
+                transaksiYangDiedit.setTipe(tipe);
+                transaksiYangDiedit.setTanggal(tanggal);
+
+                transaksiTable.refresh();
+
+                transaksiService.updateTransaksi();
+
+                exitEditMode();
+            }
+            updateTable(); 
+            dashboardView.refreshDashboard(); 
+
+            resetForm();
+    }
+
+    private void handleBatalButton(){
+            exitEditMode();
+            resetForm();
+    }
+
+    // Keluar dari mode edit
+    private void exitEditMode() {
+        transaksiYangDiedit = null;
+        tambahButton.setText("Tambah");
+        batalButton.setVisible(false);
+        batalButton.setManaged(false);
+    }
+
+    // Reset seluruh input form
+    private void resetForm(){
+        // scroll ui
+        keteranganField.clear();
+        nominalField.clear();
+        tanggalPicker.setValue(null);
+        tipeBox.setValue("Pemasukan");
     }
 
     private void showWarning(String message) {
