@@ -32,19 +32,25 @@ import javafx.scene.layout.Priority;
 public class DashboardView extends VBox { // DashboardView adalah sebuah kelas yang merupakan turunan dari VBox, yang digunakan untuk membuat tampilan dashboard dalam aplikasi. DashboardView akan menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
 
         // field class
+        // ===== SERVICE =====
         private final DashboardService dashboardService;
-        private TransaksiService transaksiService;
         private final FilterService filterService;
+        private TransaksiService transaksiService;
 
+        // ===== CARD =====
         private Label pemasukanValue;
         private Label pengeluaranValue;
         private Label saldoValue;
         private Label jumlahTransaksiValue;
         private Label rataRataValue;
+        private VBox dashboardCards;
 
+        // ===== CHART =====
         private BarChart<String, Number> chart;
         private Pane labelPane; // menaruh objek Text di atas chart
+        private StackPane chartContainer;
 
+        // ===== FILTER =====
         private ComboBox<String> filterBox; // ComboBox untuk memilih filter data pada dashboard, misalnya filter berdasarkan bulan atau tahun.
         
     public DashboardView(TransaksiService transaksiService) {
@@ -52,6 +58,24 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         this.dashboardService = new DashboardService(transaksiService); // DashboardService memakai TransaksiService sebagai sumber data.
         this.filterService =  new FilterService(); // FilterService digunakan untuk memfilter data transaksi berdasarkan tipe atau periode tertentu.
 
+        // ===== CARD =====
+        createDashboardCards();
+
+        // ===== CHART =====
+        createChart();
+
+        // ===== FILTER =====
+        createFilter();
+
+        // ===== LAYOUT =====
+        createLayout();
+
+        // memanggil method refreshDashboard
+        refreshDashboard();
+    }
+
+    // ===== CARD =====
+    private void createDashboardCards() {
         // Card Pemasukan
         Label pemasukanTitle = new Label("Total Pemasukan");
         pemasukanTitle.getStyleClass().add("card-title");
@@ -139,17 +163,17 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         row2.getStyleClass().add("card-container");
 
         // menyatukkan row card dalam satu VBox
-        VBox dashboardCards = new VBox(
+        dashboardCards = new VBox(
             row1,
             row2
         );
         dashboardCards.setSpacing(25);
         
-        // Styling Layout
-        getStyleClass().add("dashboard-view");
-        
         dashboardCards.getStyleClass().add("card-container");
+    }
 
+    // ===== CHART =====
+    private void createChart() {
         // === Buat chart ===
         // Buat sumbu X untuk kategori, buat sumbu Y untuk angka, lalu gunakan kedua sumbu tersebut untuk membuat sebuah diagram batang (BarChart)
         CategoryAxis xAxis = new CategoryAxis(); // Membuat sumbu X (horizontal) yang berisi kategori atau teks.
@@ -178,11 +202,14 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         labelPane.setMouseTransparent(true); // Agar labelPane tidak mengganggu interaksi pengguna dengan chart, labelPane diatur agar tidak menerima input mouse.
         
 
-        StackPane chartContainer = new StackPane(
+        chartContainer = new StackPane(
             chart,
             labelPane
         );
+    }
 
+    // ===== FILTER =====
+    private void createFilter() {
         // == Filter berdasarkan periode ==
         filterBox = new ComboBox<>();
         
@@ -208,6 +235,12 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
             refreshDashboard(daftarTransaksi); // Memanggil method refreshDashboard dengan daftarTransaksi yang telah difilter berdasarkan periode yang dipilih.
         });
+    }
+
+    // ===== LAYOUT =====
+    private void createLayout() {
+        // Styling Layout
+        getStyleClass().add("dashboard-view");
 
         Label title = new Label("Dashboard");
         title.getStyleClass().add("dashboard-title");
@@ -220,7 +253,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             spacer,
             filterBox
         );
-
+ 
         header.setAlignment(Pos.CENTER_LEFT); // Mengatur agar semua elemen dalam HBox header sejajar ke kiri secara vertikal.
 
         VBox content = new VBox(
@@ -233,11 +266,6 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         
         // Masukkan card ke DashboardView
         getChildren().add(content);
-
-
-
-        // memanggil method refreshDashboard
-        refreshDashboard();
     }
 
     // construktor
