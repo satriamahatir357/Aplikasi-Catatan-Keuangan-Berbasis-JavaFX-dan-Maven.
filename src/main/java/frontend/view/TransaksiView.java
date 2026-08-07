@@ -32,12 +32,11 @@ import javafx.scene.control.TableCell;
 
 public class TransaksiView extends VBox { // extends VBox untuk membuat layout vertikal
     
-    
     // === SERVICE ===
-    private TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
-    private SearchService searchService;
-    private FilterService filterService;
-    private SortService sortService;
+    private final TransaksiService transaksiService; // Deklarasi variabel transaksiService untuk mengelola transaksi dalam view ini
+    private final SearchService searchService;
+    private final FilterService filterService;
+    private final SortService sortService;
     
     // === VIEW ===
     private DashboardView dashboardView;

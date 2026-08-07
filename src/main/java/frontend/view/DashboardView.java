@@ -35,7 +35,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         // ===== SERVICE =====
         private final DashboardService dashboardService;
         private final FilterService filterService;
-        private TransaksiService transaksiService;
+        private final TransaksiService transaksiService;
 
         // ===== CARD =====
         private Label pemasukanValue;

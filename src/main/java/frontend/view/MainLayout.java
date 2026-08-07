@@ -13,7 +13,7 @@ import frontend.view.TransaksiView; // Mengimpor kelas TransaksiView dari packag
 public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen UI dalam aplikasi. BorderPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya dengan cara yang terstruktur, seperti menempatkan elemen di bagian atas, bawah, kiri, kanan, dan tengah aplikasi. Dengan menggunakan BorderPane, Anda dapat dengan mudah mengatur tampilan aplikasi Anda sesuai dengan kebutuhan desain yang diinginkan.
     
     // === SERVICE ===
-    private TransaksiService transaksiService;
+    private final TransaksiService transaksiService;
 
     // == SIDEBAR BUTTONS ===
     private Button dashboardButton;

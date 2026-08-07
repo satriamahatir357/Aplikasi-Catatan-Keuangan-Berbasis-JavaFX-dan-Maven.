@@ -11,7 +11,7 @@ import storage.CSVHelper; // Mengimpor class CSVHelper yang berada di package st
 
 // Tempat Penyimpanan Data
 public class TransaksiService {
-    public ObservableList<Transaksi> daftarTransaksi = // ObservableList digunakan untuk menyimpan data transaksi yang dapat diamati (observable) dalam JavaFX.
+    private final ObservableList<Transaksi> daftarTransaksi = // ObservableList digunakan untuk menyimpan data transaksi yang dapat diamati (observable) dalam JavaFX.
             FXCollections.observableArrayList(); // observableArrayList() adalah metode statis yang digunakan untuk membuat sebuah ObservableList baru yang dapat diamati (observable) dalam JavaFX.
 
     public TransaksiService() {
