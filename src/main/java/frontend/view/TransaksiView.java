@@ -102,101 +102,17 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // === tabel ===
         createTable();
 
-        // label
-        Label title = new Label("Tambah Transaksi");
-        title.getStyleClass().add("from-title");
-        
-        // Empty State Table
-        Label emptyLabel = new Label("Belum ada transaksi");
-        emptyLabel.getStyleClass().add("empty-table-label");
-
-        transaksiTable.setPlaceholder(emptyLabel);
-        
-        transaksiTable.getColumns().addAll( // menambahkan kolom-kolom ke dalam tabel transaksi
-            keteranganColumn,
-            nominalColumn,
-            tipeColumn,
-            tanggalColumn,
-            editColumn,
-            hapusColumn
-        ); // Menambahkan kolom-kolom ke dalam tabel transaksi
-
-        // Isi lebar tabel secara otomatis
-        transaksiTable.setColumnResizePolicy(
-            TableView.CONSTRAINED_RESIZE_POLICY
-        );
-
-        // layout
-        setSpacing(10); // setSpacing untuk memberikan jarak antar elemen dalam VBox
-
-        Label tableTitle = new Label("Daftar Transaksi");
-        tableTitle.getStyleClass().add("form-title");
-
-        HBox buttonBox = new HBox(
-            tambahButton,
-            batalButton
-        );
-
-        buttonBox.setSpacing(15);
-        buttonBox.setPadding(new Insets(10, 0, 0, 0));
-        buttonBox.setAlignment(Pos.CENTER_LEFT);
-
-        VBox formBox = new VBox(
-            keteranganField,
-            nominalField,
-            tipeBox,
-            tanggalPicker,
-            buttonBox
-        );
-        formBox.setSpacing(15);
-
-        VBox formCard = new VBox(
-            tableTitle,
-            formBox
-        );
-        formCard.getStyleClass().add("form-card");
-
-        // Buat container Search + Filter
-        HBox searchFilterBox = new HBox(
-            searchField,
-            filterBox,
-            sortBox
-        );
-        searchFilterBox.setSpacing(10);
-        searchFilterBox.setAlignment(Pos.CENTER_LEFT);
-
-        VBox tableCard = new VBox(
-            tableTitle,
-            searchFilterBox,
-            transaksiTable
-        );
-
-        tableCard.getStyleClass().add("table-card");
-
-        VBox content = new VBox(
-            formCard,
-            tableCard
-        );
-
-        getChildren().add(content);
-        updateTable();
-
-        // scroll ui
-        content.getStyleClass().add("transaksi-view");
-
-        ScrollPane scrollPane = new ScrollPane(content);
-        scrollPane.setFitToWidth(true); //setFitToWidth(true) = Lebar isi ScrollPane akan mengikuti lebar ScrollPane.
-        scrollPane.setPannable(true); // setPannable(true) = Isi ScrollPane bisa digeser (drag) menggunakan mouse atau touchpad.
-
-        getChildren().add(scrollPane);
-        scrollPane.getStyleClass().add("transaksi-scroll");
-
-
         // event handler untuk tombol tambah
         tambahButton.setOnAction(e -> handleTambahButton());
 
         // === tombol batal edit ===
         batalButton.setOnAction(e -> handleBatalButton());
+
+        // === layout ===
+        createLayout();
+
+        // === setup table ===
+        setupTable();
 
     }
     
@@ -266,22 +182,22 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         // input keterangan
         keteranganField = new TextField(); // TextField untuk input keterangan
         keteranganField.setPromptText("Masukkan Keterangan"); //setPromptText untuk memberikan petunjuk pada TextField
-        keteranganField.getStyleClass().add("from-input");
+        keteranganField.getStyleClass().add("form-input");
 
         // input nominal
         nominalField = new TextField();
         nominalField.setPromptText("Masukkan Nominal");
-        nominalField.getStyleClass().add("from-input");
+        nominalField.getStyleClass().add("form-input");
 
         // pilihan tipe
         tipeBox = new ComboBox<>( // ComboBox<string> untuk membuat dropdown pilihan tipe
             FXCollections.observableArrayList("Pemasukan", "Pengeluaran")); // FXCollections.observableArrayList untuk membuat daftar pilihan dalam ComboBox
         tipeBox.setValue("Pemasukan"); // setValue untuk menetapkan nilai default pada ComboBox
-        tipeBox.getStyleClass().add("from-combo");
+        tipeBox.getStyleClass().add("form-combo");
 
         // pilih tanggal
         tanggalPicker = new DatePicker(); // DatePicker untuk memilih tanggal
-        tanggalPicker.getStyleClass().add("from-date");
+        tanggalPicker.getStyleClass().add("form-date");
     }
 
     // === button ===
@@ -559,6 +475,101 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
         nominalField.clear();
         tanggalPicker.setValue(null);
         tipeBox.setValue("Pemasukan");
+    }
+
+    // === layout ===
+    private void createLayout(){
+        // label
+        Label title = new Label("Tambah Transaksi");
+        title.getStyleClass().add("form-title");
+
+        // layout
+        setSpacing(10); // setSpacing untuk memberikan jarak antar elemen dalam VBox
+
+        Label tableTitle = new Label("Daftar Transaksi");
+        tableTitle.getStyleClass().add("table-title");
+
+        HBox buttonBox = new HBox(
+            tambahButton,
+            batalButton
+        );
+
+        buttonBox.setSpacing(15);
+        buttonBox.setPadding(new Insets(10, 0, 0, 0));
+        buttonBox.setAlignment(Pos.CENTER_LEFT);
+
+        VBox formBox = new VBox(
+            keteranganField,
+            nominalField,
+            tipeBox,
+            tanggalPicker,
+            buttonBox
+        );
+        formBox.setSpacing(15);
+
+        VBox formCard = new VBox(
+            title,
+            tableTitle,
+            formBox
+        );
+        formCard.getStyleClass().add("form-card");
+
+        // Buat container Search + Filter
+        HBox searchFilterBox = new HBox(
+            searchField,
+            filterBox,
+            sortBox
+        );
+        searchFilterBox.setSpacing(10);
+        searchFilterBox.setAlignment(Pos.CENTER_LEFT);
+
+        VBox tableCard = new VBox(
+            tableTitle,
+            searchFilterBox,
+            transaksiTable
+        );
+
+        tableCard.getStyleClass().add("table-card");
+
+        VBox content = new VBox(
+            formCard,
+            tableCard
+        );
+
+        updateTable();
+
+        // scroll ui
+        content.getStyleClass().add("transaksi-view");
+
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true); //setFitToWidth(true) = Lebar isi ScrollPane akan mengikuti lebar ScrollPane.
+        scrollPane.setPannable(true); // setPannable(true) = Isi ScrollPane bisa digeser (drag) menggunakan mouse atau touchpad.
+
+        getChildren().add(scrollPane);
+        scrollPane.getStyleClass().add("transaksi-scroll");
+    }
+
+    // === setup table ===
+    private void setupTable(){
+        // Empty State Table
+        Label emptyLabel = new Label("Belum ada transaksi");
+        emptyLabel.getStyleClass().add("empty-table-label");
+
+        transaksiTable.setPlaceholder(emptyLabel);
+        
+        transaksiTable.getColumns().addAll( // menambahkan kolom-kolom ke dalam tabel transaksi
+            keteranganColumn,
+            nominalColumn,
+            tipeColumn,
+            tanggalColumn,
+            editColumn,
+            hapusColumn
+        ); // Menambahkan kolom-kolom ke dalam tabel transaksi
+
+        // Isi lebar tabel secara otomatis
+        transaksiTable.setColumnResizePolicy(
+            TableView.CONSTRAINED_RESIZE_POLICY
+        );
     }
 
     private void showWarning(String message) {
