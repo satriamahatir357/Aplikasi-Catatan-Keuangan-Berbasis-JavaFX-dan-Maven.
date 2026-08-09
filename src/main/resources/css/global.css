@@ -45,6 +45,16 @@
     -fx-background-color: #1D4ED8;  /* Warna yang lebih gelap saat hover */
 }
 
+/* Tombol sidebar yang sedang aktif */
+.sidebar-button-active {
+    -fx-background-color: #1D4ED8;
+}
+
+/* Saat tombol ditekan */
+.sidebar-button:pressed {
+    -fx-background-color: #1E40AF;
+}
+
 /* content */
 .content-area{
     -fx-padding: 30px;
