@@ -24,6 +24,11 @@
     -fx-font-size: 14px;
 }
 
+.form-input:focused {
+    -fx-border-color: #2563EB;
+    -fx-border-width: 2px;
+}
+
 .form-combo{
     -fx-background-color: white;
     -fx-background-radius: 8px;
@@ -32,11 +37,21 @@
     -fx-font-size:14px;
 }
 
+.form-combo:focused {
+    -fx-border-color: #2563EB;
+    -fx-border-width: 2px;
+}
+
 .form-date{
     -fx-background-color: white;
     -fx-background-radius: 8px;
     -fx-border-color:#CBD5E1;
     -fx-border-radius:8px;
+}
+
+.form-date:focused {
+    -fx-border-color: #2563EB;
+    -fx-border-width: 2px;
 }
 
 .primary-button{
@@ -86,7 +101,7 @@
 }
 
 .transaksi-table .table-row-cell{
-    -fx-cell-size: 40px; /*-fx-cell-size digunakan untuk mengatur tinggi setiap baris (row) pada komponen seperti TableView, ListView, dan TreeView.*/
+    -fx-cell-size: 44px; /*-fx-cell-size digunakan untuk mengatur tinggi setiap baris (row) pada komponen seperti TableView, ListView, dan TreeView.*/
 }
 
 .transaksi-table .table-row-cell:hover{
@@ -144,6 +159,7 @@
 .empty-table-label{
     -fx-font-size: 14px;
     -fx-text-fill: #94A3B8;
+    -fx-font-style: italic;
 }
 /* scroll ui */
 .transaksi-scroll{
@@ -258,7 +274,7 @@
 
 .filter-box{
     -fx-pref-width: 170px;
-    -fx-pref-heigth: 40;
+    -fx-pref-height: 40;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-font-size: 14;
@@ -267,7 +283,7 @@
 /* == sortbox == */
 .sort-box{
     -fx-pref-width: 190;
-    -fx-pref-heigth: 40;
+    -fx-pref-height: 40;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-font-size: 14;
