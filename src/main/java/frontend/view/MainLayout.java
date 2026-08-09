@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang d
 import backend.TransaksiService;
 import frontend.view.DashboardView; // Mengimpor kelas DashboardView dari package frontend.view, yang merupakan tampilan untuk menampilkan informasi seperti total pemasukan, total pengeluaran, dan saldo kepada pengguna.
 import frontend.view.TransaksiView; // Mengimpor kelas TransaksiView dari package frontend.view, yang merupakan tampilan untuk menambahkan transaksi baru, termasuk input keterangan, nominal, tipe transaksi, dan tanggal transaksi, serta menampilkan daftar transaksi yang telah ditambahkan.
+import org.kordamp.ikonli.javafx.FontIcon; // FontIcon adalah sebuah kelas dalam JavaFX yang digunakan untuk menampilkan ikon berbasis font dalam antarmuka pengguna. Dengan menggunakan FontIcon, Anda dapat menambahkan ikon-ikon dari berbagai pustaka ikon (seperti FontAwesome, Material Design Icons, dll.) ke dalam aplikasi JavaFX Anda, sehingga meningkatkan tampilan visual dan pengalaman pengguna.
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons; // Mengimpor kelas BootstrapIcons dari pustaka ikon Kordamp Ikonli, yang menyediakan ikon-ikon berbasis font dari Bootstrap Icons. Dengan mengimpor kelas ini, Anda dapat menggunakan ikon-ikon Bootstrap dalam aplikasi JavaFX Anda melalui FontIcon.
 
 public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen UI dalam aplikasi. BorderPane memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya dengan cara yang terstruktur, seperti menempatkan elemen di bagian atas, bawah, kiri, kanan, dan tengah aplikasi. Dengan menggunakan BorderPane, Anda dapat dengan mudah mengatur tampilan aplikasi Anda sesuai dengan kebutuhan desain yang diinginkan.
     
@@ -44,20 +46,32 @@ public class MainLayout extends BorderPane { //BorderPane adalah sebuah kelas da
     
     // === SIDEBAR ===
     private void createSidebar(){
+        // === DASHBOARD ===
         dashboardButton = new Button("Dashboard");
         dashboardButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
         dashboardButton.getStyleClass().add("sidebar-button-active");
+
+        // === ICON DASHBOARD ===
+        FontIcon dashboardIcon = new FontIcon(BootstrapIcons.SPEEDOMETER2);
+        dashboardIcon.setIconSize(18);
+        dashboardButton.setGraphic(dashboardIcon);
         
+        // === TRANSAKSI ===
         transaksiButton = new Button("Transaksi");
         transaksiButton.getStyleClass().add("sidebar-button"); // memanggil css sidebar-button
+
+        // === ICON TRANSAKSI ===
+        FontIcon transaksiIcon = new FontIcon(BootstrapIcons.WALLET2);
+        transaksiIcon.setIconSize(18);
+        transaksiButton.setGraphic(transaksiIcon);
 
         VBox sidebar = new VBox( // Membuat sebuah objek VBox yang akan digunakan sebagai sidebar dalam aplikasi. VBox adalah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. Dengan membuat objek VBox, kita dapat menambahkan tombol-tombol navigasi seperti dashboardButton dan transaksiButton ke dalamnya, sehingga akan ditampilkan secara vertikal di sisi kiri aplikasi.
                 dashboardButton,
                 transaksiButton
             );
 
-            sidebar.setAlignment(Pos.TOP_CENTER);
-            sidebar.getStyleClass().add("sidebar"); // memanggil css sidebar
+        sidebar.setAlignment(Pos.TOP_CENTER);
+        sidebar.getStyleClass().add("sidebar"); // memanggil css sidebar
         
             // === BorderPane ===
             setLeft(sidebar);  // Menempatkan sidebar di bagian kiri BorderPane, sehingga akan menampilkan tombol-tombol navigasi seperti
