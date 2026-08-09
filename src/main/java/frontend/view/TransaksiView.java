@@ -230,10 +230,16 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
     private void createTableView(){
         // tabel transaksi
         transaksiTable = new TableView<>(); // TableView untuk menampilkan daftar transaksi, tipe data disesuaikan dengan model transaksi yang digunakan
+        
+        transaksiTable.setColumnResizePolicy(
+            TableView.CONSTRAINED_RESIZE_POLICY
+        );
+
         transaksiTable.setItems(transaksiService.getDaftarTransaksi()); // setItems untuk menghubungkan TableView dengan data transaksi yang dikelola oleh transaksiService
         transaksiTable.getStyleClass().add("transaksi-table");
         transaksiTable.setPrefHeight(300); // setPrefHeight untuk mengatur tinggi tabel transaksi
     }
+
     private void createKeteranganColumn(){
         // kolom keterangan
         keteranganColumn = new TableColumn<>("Keterangan"); // TableColumn untuk kolom keterangan, tipe data String
@@ -605,7 +611,7 @@ public class TransaksiView extends VBox { // extends VBox untuk membuat layout v
                             sortBox.getValue()
             );
             transaksiTable.setItems(hasil);
-
+            transaksiTable.refresh();
         }
     
 }

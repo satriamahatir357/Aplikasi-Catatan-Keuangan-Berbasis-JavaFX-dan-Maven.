@@ -164,11 +164,41 @@
 /* scroll ui */
 .transaksi-scroll{
     -fx-background-color: transparent;
+    -fx-background: transparent;
     -fx-border-color: transparent;
 }
 
 .transaksi-scroll > .viewport{
     -fx-background-color: transparent;
+}
+
+.transaksi-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+}
+
+.transaksi-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #CBD5E1;
+    -fx-background-radius: 5px;
+}
+
+.transaksi-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #94A3B8;
+}
+
+/* Scroll Bar Horizontal */
+.transaksi-table .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-height: 10px;
+}
+
+.transaksi-table .scroll-bar:horizontal .thumb {
+    -fx-background-color: #CBD5E1;
+    -fx-background-radius: 5px;
+}
+
+.transaksi-table .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #94A3B8;
 }
 
 /* === Alert tambah button === */
@@ -266,10 +296,19 @@
 .search-field{
     -fx-pref-height: 40;
     -fx-font-size: 14;
+    -fx-background-color: white;
     -fx-background-radius: 8;
+    -fx-border-color: #CBD5E1;
+    -fx-border-width: 1;
     -fx-border-radius: 8;
     -fx-padding: 0 12 0 12;
     -fx-pref-width: 420;
+
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(0,0,0,0.08),
+        6, 0, 0, 1
+    );
 }
 
 .filter-box{
