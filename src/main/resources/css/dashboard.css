@@ -11,6 +11,7 @@
     -fx-border-radius: 12;
 
     -fx-padding: 20;
+    -fx-spacing: 8;
 
     -fx-min-width: 220;
     -fx-min-height: 120;
@@ -31,6 +32,7 @@
     -fx-border-radius: 12;
 
     -fx-padding: 20;
+    -fx-spacing: 8;
 
     -fx-min-width: 350;
     -fx-min-height: 120;
@@ -45,6 +47,7 @@
 
 .card-title{
     -fx-font-size: 14px;
+    -fx-font-weight: bold;
     -fx-text-fill: #64748D;
 }
 
@@ -92,6 +95,7 @@
     -fx-background-radius: 12;
     -fx-border-color: #E2E8F0;
     -fx-border-radius: 12;
+    -fx-padding: 10;
 }
 
 .chart .axis {
@@ -151,4 +155,48 @@
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: #0F172A;
+}
+
+.dashboard-scroll{
+    -fx-background-color: transparent;
+    -fx-background-insets: 0; /* Menghapus latar belakang default dari ScrollPane */
+    -fx-padding: 0;
+}
+
+/* Area tempat content dashboard berada */
+.dashboard-scroll > .viewport{ /* > viewport adalah area yang menampilkan konten yang dapat digulir di dalam ScrollPane. */
+    -fx-background-color: transparent;
+}
+
+/* Hilangkan border bawaan */
+.dashboard-scroll{
+    -fx-border-color: transparent; /* Menghapus border default dari ScrollPane */
+}
+
+/* Scrollbar vertikal */
+.dashboard-scroll .scroll-bar:vertical { /* Menargetkan scrollbar vertikal di dalam ScrollPane dengan class "dashboard-scroll". */
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+}
+
+/* Track scrollbar */
+.dashboard-scroll .scroll-bar:vertical .track { /* Menargetkan track (bagian yang menunjukkan area gulir) dari scrollbar vertikal di dalam ScrollPane dengan class "dashboard-scroll". */
+    -fx-background-color: transparent;
+}
+
+/* Thumb scrollbar */
+.dashboard-scroll .scroll-bar:vertical .thumb { /* Menargetkan thumb (bagian yang dapat digeser) dari scrollbar vertikal di dalam ScrollPane dengan class "dashboard-scroll". */
+    -fx-background-color: #CBD5E1;
+    -fx-background-radius: 10px;
+}
+
+/* Hover thumb */
+.dashboard-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #94A3B8;
+}
+
+/* Hilangkan scrollbar horizontal */
+.dashboard-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
 }

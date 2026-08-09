@@ -10,6 +10,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yang digunakan untuk menampilkan teks statis pada antarmuka pengguna. Label biasanya digunakan untuk memberikan informasi atau deskripsi kepada pengguna.
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox; // HBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara horizontal. HBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari kiri ke kanan.
 import javafx.scene.layout.Pane;
@@ -196,7 +197,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         
         chart.setLegendVisible(false);
         chart.setAnimated(false);
-        chart.setPrefHeight(300);
+        chart.setPrefHeight(330);
 
         labelPane = new Pane(); // labelPane digunakan untuk menaruh objek Text di atas chart
         labelPane.setMouseTransparent(true); // Agar labelPane tidak mengganggu interaksi pengguna dengan chart, labelPane diatur agar tidak menerima input mouse.
@@ -264,8 +265,14 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
         content.setSpacing(15);
         
+        // ScrollPane
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true); // Mengatur agar konten dalam ScrollPane menyesuaikan lebar ScrollPane, sehingga tidak ada ruang kosong di sisi kiri atau kanan konten.
+        scrollPane.setPannable(true); // Mengatur agar konten dalam ScrollPane dapat digeser secara horizontal dan vertikal jika konten melebihi ukuran ScrollPane.
+
         // Masukkan card ke DashboardView
-        getChildren().add(content);
+        getChildren().add(scrollPane);
+        scrollPane.getStyleClass().add("dashboard-scroll");
     }
 
     // construktor
