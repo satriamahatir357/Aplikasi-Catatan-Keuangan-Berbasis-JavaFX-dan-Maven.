@@ -225,6 +225,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
         filterBox.setValue("Semua"); // Set default value dari ComboBox menjadi "Semua"
         filterBox.setPrefWidth(140); // Set lebar ComboBox menjadi 140 piksel
+        filterBox.setPrefHeight(40);
 
         filterBox.setOnAction(e -> {
             String periode = filterBox.getValue(); // Ambil nilai yang dipilih dari ComboBox dan simpan dalam variabel periode.
