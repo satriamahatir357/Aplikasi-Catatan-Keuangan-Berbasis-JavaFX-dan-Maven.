@@ -89,6 +89,27 @@
     -fx-border-width: 2;
 }
 
+/* Warna nilai sesuai jenis card */
+.income-card .card-value {
+    -fx-text-fill: #16A34A;
+}
+
+.expense-card .card-value {
+    -fx-text-fill: #DC2626;
+}
+
+.balance-card .card-value {
+    -fx-text-fill: #2563EB;
+}
+
+.transaction-card .card-value {
+    -fx-text-fill: #7C3AED;
+}
+
+.avenger-card .card-value {
+    -fx-text-fill: #D97706;
+}
+
 /* CSS Bar Chart */
 .chart{
     -fx-background-color: white;
