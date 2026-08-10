@@ -26,6 +26,7 @@ import java.util.Set;
 import javafx.scene.text.Text;
 import model.Transaksi;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
 
@@ -263,6 +264,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         );
 
         content.setSpacing(15);
+        content.setPadding(new Insets(20)); // Mengatur jarak antara elemen-elemen dalam VBox content sebesar 20 piksel di semua sisi (atas, kanan, bawah, kiri).
         
         // ScrollPane
         ScrollPane scrollPane = new ScrollPane(content);
