@@ -168,7 +168,6 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
             row1,
             row2
         );
-        dashboardCards.setSpacing(25);
         
         dashboardCards.getStyleClass().add("card-container");
     }
