@@ -13,7 +13,6 @@ import javafx.scene.control.Label; // Label adalah sebuah kelas dalam JavaFX yan
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox; // HBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara horizontal. HBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari kiri ke kanan.
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox; // VBox adalah sebuah kelas dalam JavaFX yang digunakan untuk mengatur tata letak elemen-elemen secara vertikal. VBox memungkinkan Anda untuk menempatkan elemen-elemen di dalamnya secara berurutan dari atas ke bawah.
 
@@ -48,7 +47,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
         // ===== CHART =====
         private BarChart<String, Number> chart;
-        private Pane labelPane; // menaruh objek Text di atas chart
+        private StackPane labelPane;
         private StackPane chartContainer;
 
         // ===== FILTER =====
@@ -339,9 +338,7 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
 
             labelPane.getChildren().add(emptyLabel);
 
-            emptyLabel.setLayoutX(0); // Mengatur posisi horizontal label kosong agar berada di koordinat X = 0, sehingga label akan muncul di sisi kiri chart.
-            emptyLabel.setLayoutY(130); // Mengatur posisi vertikal label kosong agar berada di koordinat Y = 130, sehingga label akan muncul di tengah-tengah chart secara vertikal.
-
+            labelPane.setAlignment(Pos.CENTER);
             return;
 
         }
