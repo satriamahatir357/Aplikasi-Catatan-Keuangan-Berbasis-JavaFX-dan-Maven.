@@ -151,6 +151,13 @@
     -fx-bar-fill: #3B82F6;
 }
 
+/* == empty state chart == */
+.empty-chart-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94A3B8;
+}
+
 /* == Styling ComboBox == */
 .combo-box{
     -fx-background-color: white;

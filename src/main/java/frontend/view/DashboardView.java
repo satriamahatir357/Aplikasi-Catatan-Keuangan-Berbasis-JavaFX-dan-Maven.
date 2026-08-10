@@ -199,9 +199,9 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
         chart.setAnimated(false);
         chart.setPrefHeight(330);
 
-        labelPane = new Pane(); // labelPane digunakan untuk menaruh objek Text di atas chart
+        // === Buat labelPane ===
+        labelPane = new StackPane(); // labelPane digunakan untuk menaruh objek Text di atas chart
         labelPane.setMouseTransparent(true); // Agar labelPane tidak mengganggu interaksi pengguna dengan chart, labelPane diatur agar tidak menerima input mouse.
-        
 
         chartContainer = new StackPane(
             chart,
@@ -330,6 +330,23 @@ public class DashboardView extends VBox { // DashboardView adalah sebuah kelas y
     public void updateChart(ObservableList<Transaksi> daftar) {
         chart.getData().clear(); // Menghapus semua data yang ada di chart agar tidak menumpuk saat chart diperbarui.
         labelPane.getChildren().clear(); // Menghapus semua label yang ada di labelPane agar tidak menumpuk saat chart diperbarui.
+        
+        if(daftar.isEmpty()){
+            chart.setVisible(false); // Jika daftar transaksi kosong, maka chart akan disembunyikan agar tidak menampilkan grafik kosong.
+
+            Label emptyLabel = new Label("Belum ada data transaksi");
+            emptyLabel.getStyleClass().add("empty-chart-label");
+
+            labelPane.getChildren().add(emptyLabel);
+
+            emptyLabel.setLayoutX(0); // Mengatur posisi horizontal label kosong agar berada di koordinat X = 0, sehingga label akan muncul di sisi kiri chart.
+            emptyLabel.setLayoutY(130); // Mengatur posisi vertikal label kosong agar berada di koordinat Y = 130, sehingga label akan muncul di tengah-tengah chart secara vertikal.
+
+            return;
+
+        }
+        chart.setVisible(true); // Jika daftar transaksi tidak kosong, maka chart akan ditampilkan agar grafik dapat terlihat.
+        
         // Series Pemasukan
         XYChart.Series<String, Number> pemasukanSeries = new XYChart.Series<>(); // Membuat sebuah series baru untuk data pemasukan. Series ini akan berisi pasangan kategori (String) dan nilai (Number) yang akan ditampilkan pada chart.
         pemasukanSeries.getData().add( // Menambahkan data pemasukan ke dalam series. Data ini terdiri dari kategori "Pemasukan" dan nilai total pemasukan yang diperoleh dari dashboardService.
