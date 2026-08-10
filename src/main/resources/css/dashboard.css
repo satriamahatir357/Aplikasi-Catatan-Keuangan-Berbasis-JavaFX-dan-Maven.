@@ -198,6 +198,10 @@
     -fx-border-color: #3B82F6;
 }
 
+.combo-box:focused {
+    -fx-border-color: #3B82F6;
+}
+
 /* Styling Header Dashboard */
 .dashboard-title{
     -fx-font-size: 24px;
